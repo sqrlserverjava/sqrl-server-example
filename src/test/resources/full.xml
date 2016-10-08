@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <example_app_users id="1" username="7wUwxK6Pbscps6pkadmy7Xvt7mYWbvyPJPXBr1t04mA" auth_restriction="NONE" created_at="2016-05-11 10:21:25.0"/>
+  <sqrl_used_tokens token="cpGxL2SftKCzgti5TJrszA" expires_at="2016-05-14 21:41:07.0"/>
+  <sqrl_used_tokens token="/1z+pkzWlyonB3ugU9Pf1w" expires_at="2016-05-14 21:41:19.0"/>
+  <sqrl_user_data id="1" user_id="1" the_name="suk" the_value="0rPXuIfPJsov8hNPc9E0k_qPhNdFAlINrnMG3HHV8nQ"/>
+  <sqrl_user_data id="2" user_id="1" the_name="vuk" the_value="RhzQA4Ks4B2s4LI1h2E0bvBSEm0L_J2tZE7WJnBnzZU"/>
+  <sqrl_users id="1" user_id="1" sqrl_enabled="false" last_login_coorelator="7wUwxK6Pbscps6pkadmy7Xvt7mYWbvyPJPXBr1t04mA" last_login_timestamp="2016-05-11 10:21:25.0" idk="CW6EXEMdclZc3JEJky_KwMF_DhMbkV15E6Q14pyqMNY"/>
+</dataset>
