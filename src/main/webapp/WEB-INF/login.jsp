@@ -95,7 +95,7 @@
 		    	myObject.status = 'redirect';
 		        subSocket.push(JSON.stringify(myObject));
             	subSocket.push(atmosphere.util.stringifyJSON({ correlator: author, status: 'redirect' }));
-            	window.location.replace('login');
+            	window.location.replace('app');
 			} else {
 				// Not sure what else to do so just reload
 				window.location.replace('login');

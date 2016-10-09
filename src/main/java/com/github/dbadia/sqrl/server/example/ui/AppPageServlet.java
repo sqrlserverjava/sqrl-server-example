@@ -40,7 +40,12 @@ public class AppPageServlet extends HttpServlet {
 
 		if (Util.isBlank(user.getGivenName()) || Util.isBlank(user.getWelcomePhrase())) {
 			// New user got here by accident, send them to the new user enroll page
-			request.getRequestDispatcher("WEB-INF/usersettings.jsp").forward(request, response);
+			// request.getRequestDispatcher("WEB-INF/usersettings.jsp").forward(request, response);
+			// TODO: do we need the logic above?
+
+			// sqrlIdentity exists but NativeAppUser doesn't. Send them to enrollment page to see if they have a
+			// user name and password or are completely new
+			request.getRequestDispatcher("WEB-INF/linkaccountoption.jsp").forward(request, response);
 			return;
 		}
 
@@ -50,7 +55,7 @@ public class AppPageServlet extends HttpServlet {
 		} else if (sqrlServerOperations.fetchSqrlIdentityByUserXref(Long.toString(user.getId())) != null) {
 			accountType = "Both SQRL and username/password";
 		}
-		HttpSession session = request.getSession(false);
+		final HttpSession session = request.getSession(false);
 		session.setAttribute("givenname", user.getGivenName());
 		session.setAttribute("phrase", user.getWelcomePhrase());
 		session.setAttribute("accounttype", accountType);

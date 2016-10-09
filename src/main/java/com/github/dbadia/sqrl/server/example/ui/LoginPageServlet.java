@@ -37,12 +37,12 @@ import com.github.dbadia.sqrl.server.example.sqrl.SqrlSettings;
 
 /**
  * Servlet which is called during various login actions.
- * 
+ *
  * Specifically:
  * <li>1) to present the login page (with SQRL option)
  * <li>2) when a user logs in via username password &type=up
  * <li>3) when the SQRL state changes, ie SQRL auth in progress or SQRL auth complete (see {@link PageSyncJsServlet}
- * 
+ *
  * @author Dave Badia
  *
  */
@@ -90,9 +90,10 @@ public class LoginPageServlet extends HttpServlet {
 			} else if (appUser != null) {
 				// Is the user logged in but got here by mistake? If so, send them to the app page
 				sendUserToAppPage(response);
-			} else if (requestContainsCorrelatorCookie && checkForSqrlAuthComplete(request, response)) {
+			} else if (requestContainsCorrelatorCookie && checkForSqrlAuthComplete(request, response)) { // TODO: remove
 				// Nothing else to do, just fall through and return
-			} else if (requestContainsCorrelatorCookie && checkForSqrlAuthInProgress(request, response)) {
+			} else if (requestContainsCorrelatorCookie && checkForSqrlAuthInProgress(request, response)) { // TODO:
+																											// remove
 				// Nothing else to do, just fall through and return
 			} else {
 				showLoginPage(request, response);
