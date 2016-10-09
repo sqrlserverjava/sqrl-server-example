@@ -28,13 +28,14 @@ import com.github.dbadia.sqrl.server.example.sqrl.SqrlSettings;
  * Invoked by the pagesync.js script running on the users browser. This script will typically return the same value over
  * and over until a state change occurs. When the pagesync.js script sees the value change, it will refresh the page so
  * the new state can be shown
- * 
+ *
  * These values returned by this servlet (no, inprogress, sqrlauth) have NO actual meaning to the auth page; but anytime
  * the value changes, the page will refresh to update it's state
- * 
+ *
  * @author Dave Badia
  *
  */
+// TODO: remove this since it is no longer in use
 @WebServlet(urlPatterns = { "/sqrlauto" })
 public class PageSyncJsServlet extends HttpServlet {
 	enum SqrlLoginPageStatus {
@@ -43,7 +44,7 @@ public class PageSyncJsServlet extends HttpServlet {
 
 	/**
 	 * We generate a new SQRL QR login code when the Nut token expiry time drops below this value
-	 * 
+	 *
 	 * @see #checkForCloseToNutExpiry(HttpSession)
 	 */
 	private static final long QR_REFERSH_THRESHOLD = TimeUnit.MINUTES.toMillis(5);
@@ -103,19 +104,19 @@ public class PageSyncJsServlet extends HttpServlet {
 	/**
 	 * As with any new technology, correct functionality is a key to adoption. If a user tries SQRL for the first time,
 	 * but it doesn't work, there is a likelyhood they will never try it again.
-	 * 
+	 *
 	 * Being that SQRL is a new technology, there is a good chance the user may be seeing it for the first time. They
 	 * may see the SQRL QR code, go read about SQRL and install a client. By the time they get back to the login page,
 	 * the Nut token may have expired. So we will proactively reload the login page with a fresh QR code periodically.
-	 * 
+	 *
 	 * The 2nd scenario is that a user already installed the SQRL client, but has not used it in some time as SQRL may
 	 * not be widespread. If the user has trouble remembering their password, there may be a significant delay (minute
 	 * or two) from the time the user clicks/scans the QR code and time the SQRL client sends us the request. So, we
 	 * should also reload the login page a few minutes <b>before</b> the SQRL nut will timeout. This will ensure there
 	 * is a buffer between the time a code can be scanned/clicked and the Nut token timeout
-	 * 
+	 *
 	 * @throws SqrlException
-	 * 
+	 *
 	 */
 	private SqrlLoginPageStatus checkForCloseToNutExpiry(final HttpServletRequest request,
 			final HttpServletResponse response) throws SqrlException {
@@ -143,7 +144,7 @@ public class PageSyncJsServlet extends HttpServlet {
 	 * Sometimes, when the time between SQRL clients query and ident messages very fast, the users browser gets stuck on
 	 * the "authenticating" spinner. Once we get the SQRL_AUTHENTICATED status, there should be no more requests here.
 	 * If there are, send an alternate value so the page will refresh
-	 * 
+	 *
 	 * @return an authenticated status if the user is authenticated, or null if they aren't
 	 */
 	private SqrlLoginPageStatus checkForAuthenticatedButNeedsRefresh(final SqrlLoginPageStatus previousStatus) {

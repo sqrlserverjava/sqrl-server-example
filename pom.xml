@@ -28,18 +28,22 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.38</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.eclipse.persistence/javax.persistence -->
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>javax.persistence</artifactId>
 			<version>2.1.1</version>
 		</dependency>
-
 		<dependency>
 			<!-- Reference JPA provider -->
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
 			<version>2.6.3</version>
+		</dependency>
+		<dependency>
+			<!-- We use derby db for the demo app -->
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.12.1.1</version>
 		</dependency>
 
 		<!-- TEST -->

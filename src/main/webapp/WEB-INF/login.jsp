@@ -33,29 +33,29 @@
 				</p>
 				<a id="cancel" href="logout">Cancel SQRL authentication</a>
 			</div>
-		</div>
-		<div id="or" class="col-sm-4 ">
-			<br />
-			<p>
-			<h3 class="text-center">OR</h3>
-			</p>
-		</div>
-		<div id="uplogin" class="col-sm-4">
-			<h3>Username / password login</h3>
-			<p>
-				Username: (alphanumeric)<br />
-			<form action="login" method="post">
-				<input type="text" name="username" pattern="[a-zA-Z0-9]+"maxlength="10" required>
-				<br> Password:<br> 
-				<input type="password" name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required>
-				<br> 
-				<input type="hidden" name="type" value="up"><br> <input type="submit" value="Submit">
-			</form>
-			<br /> <br />
-			<p>
-				Note: password is "sqrl" for all users.<br />
-			<p>You can create a new user with either authentication method</p>
-			<br />
+			<div id="or" class="col-sm-4 ">
+				<br />
+				<p>
+				<h3 class="text-center">OR</h3>
+				</p>
+			</div>
+			<div id="uplogin" class="col-sm-4">
+				<h3>Username / password login</h3>
+				<p>
+					Username: (alphanumeric)<br />
+				<form action="login" method="post">
+					<input type="text" name="username" pattern="[a-zA-Z0-9]+"maxlength="10" required>
+					<br> Password:<br> 
+					<input type="password" name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required>
+					<br> 
+					<input type="hidden" name="type" value="up"><br> <input type="submit" value="Submit">
+				</form>
+				<br /> <br />
+				<p>
+					Note: password is "sqrl" for all users.<br />
+				<p>You can create a new user with either authentication method</p>
+				<br />
+			</div>
 		</div>
 	</div>
 
@@ -94,6 +94,7 @@
 		    	myObject.correlator = '<%=(String) request.getAttribute("correlator")%>';
 		    	myObject.status = 'redirect';
 		        subSocket.push(JSON.stringify(myObject));
+            	subSocket.push(atmosphere.util.stringifyJSON({ correlator: author, status: 'redirect' }));
             	window.location.replace('login');
 			} else {
 				// Not sure what else to do so just reload
