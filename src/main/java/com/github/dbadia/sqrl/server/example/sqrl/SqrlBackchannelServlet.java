@@ -14,12 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dbadia.sqrl.server.SqrlConfig;
+import com.github.dbadia.sqrl.server.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.SqrlException;
 import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
 
 /**
  * The backchannel servlet will handle SQRL client calls only. No user side html is served from here.
- * 
+ *
  * @author Dave Badia
  *
  */
@@ -47,7 +48,7 @@ public class SqrlBackchannelServlet extends HttpServlet {
 
 	private void initializeIfNecessary() throws SqrlException {
 		if (!initialized.get()) {
-			sqrlConfig = SqrlSettings.getSqrlConfig();
+			sqrlConfig = SqrlConfigHelper.loadFromClasspath();;
 			sqrlServerOps = new SqrlServerOperations(sqrlConfig);
 			initialized.set(true);
 		}

@@ -12,19 +12,20 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.dbadia.sqrl.server.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
-import com.github.dbadia.sqrl.server.example.sqrl.SqrlSettings;
 
 /**
  * Servlet which handles logout requests
- * 
+ *
  * @author Dave Badia
  *
  */
 @WebServlet(name = "SqrlExampleLogout", urlPatterns = { "/logout" })
 public class LogoutServlet extends HttpServlet {
 	private static final Logger logger = LoggerFactory.getLogger(LogoutServlet.class);
-	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(SqrlSettings.getSqrlConfig());
+	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(
+			SqrlConfigHelper.loadFromClasspath());
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)

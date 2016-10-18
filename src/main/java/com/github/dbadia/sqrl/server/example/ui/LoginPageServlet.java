@@ -8,7 +8,6 @@ import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.Base64;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -23,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dbadia.sqrl.server.SqrlAuthPageData;
 import com.github.dbadia.sqrl.server.SqrlAuthenticationStatus;
 import com.github.dbadia.sqrl.server.SqrlConfig;
+import com.github.dbadia.sqrl.server.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.SqrlException;
 import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.data.SqrlCorrelator;
@@ -33,7 +33,6 @@ import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.example.data.AppDatastore;
 import com.github.dbadia.sqrl.server.example.data.AppUser;
-import com.github.dbadia.sqrl.server.example.sqrl.SqrlSettings;
 
 /**
  * Servlet which is called during various login actions.
@@ -51,7 +50,7 @@ public class LoginPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 5609899766821704630L;
 
 	private static final Logger logger = LoggerFactory.getLogger(LoginPageServlet.class);
-	private final SqrlConfig sqrlConfig = SqrlSettings.getSqrlConfig();
+	private final SqrlConfig sqrlConfig = SqrlConfigHelper.loadFromClasspath();
 	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(sqrlConfig);
 
 	private String spinnerB64Cache = null;
@@ -89,11 +88,12 @@ public class LoginPageServlet extends HttpServlet {
 				handleUsernamePasswordAuthentication(request, response);
 			} else if (appUser != null) {
 				// Is the user logged in but got here by mistake? If so, send them to the app page
+				logger.warn("Authenticated user reached login page, redirect to /app");
 				sendUserToAppPage(response);
 			} else if (requestContainsCorrelatorCookie && checkForSqrlAuthComplete(request, response)) { // TODO: remove
 				// Nothing else to do, just fall through and return
 			} else if (requestContainsCorrelatorCookie && checkForSqrlAuthInProgress(request, response)) { // TODO:
-																											// remove
+				// remove
 				// Nothing else to do, just fall through and return
 			} else {
 				showLoginPage(request, response);
@@ -293,10 +293,5 @@ public class LoginPageServlet extends HttpServlet {
 			}
 		}
 		return spinnerB64Cache;
-	}
-
-	@Override
-	public void init(final ServletConfig servletConfig) throws ServletException {
-		super.init();
 	}
 }
