@@ -38,9 +38,12 @@ import com.github.dbadia.sqrl.server.example.data.AppUser;
  * Servlet which is called during various login actions.
  *
  * Specifically:
- * <li>1) to present the login page (with SQRL option)
+ * <li>1) to present the login page with SQRL option
  * <li>2) when a user logs in via username password &type=up
- * <li>3) when the SQRL state changes, ie SQRL auth in progress or SQRL auth complete (see {@link PageSyncJsServlet}
+ * <li>3) when SQRL authentication completes
+ *
+ * Note that similar actions are taken in 2 and 3. With authentication complete, the users session is setup so they can
+ * access the application
  *
  * @author Dave Badia
  *
@@ -103,6 +106,7 @@ public class LoginPageServlet extends HttpServlet {
 		}
 	}
 
+	// TODO: remove as this is handled in browser now
 	private boolean checkForSqrlAuthInProgress(final HttpServletRequest request, final HttpServletResponse response)
 			throws SqrlPersistenceException, IOException, ServletException {
 		// Check for SQRL auth in progress so we can show spinner
@@ -135,12 +139,19 @@ public class LoginPageServlet extends HttpServlet {
 		final SqrlAuthenticationStatus authStatus = sqrlCorrelator.getAuthenticationStatus();
 		if (authStatus.isErrorStatus()) {
 			// Error state
+			sqrlServerOperations.deleteSqrlCorrelator(sqrlCorrelator);
 			showLoginPage(request, response, "<font color='red'>SQRL protocol error: " + authStatus + "</font>");
 			return true;
 		} else if (SqrlAuthenticationStatus.AUTH_COMPLETE == authStatus) {
 			final SqrlIdentity sqrlIdentity = sqrlCorrelator.getAuthenticatedIdentity();
+			// We are now processing a correlator in the AUTH_COMPLETE state
+			// We must delete it from the database so it will not be processed again
+			// Otherwise this would become a second form of auth token (JSESSION id, etc)
+			sqrlServerOperations.deleteSqrlAuthCookies(request, response);
+			sqrlServerOperations.deleteSqrlCorrelator(sqrlCorrelator);
+			// Now process the AUTH_COMPLETE state
 			if (sqrlIdentity == null) {
-				// The cookie status was AUTH_COMPLETE but the user isn't authenticated
+				logger.warn("Correaltor status return AUTH_COMPLETE but use isn't authenticated");
 				return false;
 			}
 			final HttpSession session = request.getSession(true);
@@ -152,9 +163,6 @@ public class LoginPageServlet extends HttpServlet {
 				nativeAppUser = AppDatastore.getInstance().fetchUserById(Long.parseLong(nativeUserXref));
 			}
 			final boolean existingAppUser = nativeAppUser != null;
-			// Clear our SQRL cookies and the correaltor since auth is complete
-			sqrlServerOperations.deleteSqrlAuthCookies(request, response);
-			sqrlServerOperations.deleteSqrlCorrelator(sqrlCorrelator);
 			// Page sync cookie was specific to the example app, so delete it now
 			Util.deleteCookies(request, response, Constants.COOKIE_PREVIOUS_PAGE_SYNC_PREVIOUS_STATUS);
 			if (existingAppUser) {
