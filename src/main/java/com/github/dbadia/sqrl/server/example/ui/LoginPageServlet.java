@@ -27,7 +27,6 @@ import com.github.dbadia.sqrl.server.SqrlException;
 import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.data.SqrlCorrelator;
 import com.github.dbadia.sqrl.server.data.SqrlIdentity;
-import com.github.dbadia.sqrl.server.data.SqrlPersistenceException;
 import com.github.dbadia.sqrl.server.example.Constants;
 import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
@@ -95,37 +94,11 @@ public class LoginPageServlet extends HttpServlet {
 				sendUserToAppPage(response);
 			} else if (requestContainsCorrelatorCookie && checkForSqrlAuthComplete(request, response)) { // TODO: remove
 				// Nothing else to do, just fall through and return
-			} else if (requestContainsCorrelatorCookie && checkForSqrlAuthInProgress(request, response)) { // TODO:
-				// remove
-				// Nothing else to do, just fall through and return
 			} else {
 				showLoginPage(request, response);
 			}
 		} catch (final Exception e) {
 			throw new ServletException("Error rendering login page", e);
-		}
-	}
-
-	// TODO: remove as this is handled in browser now
-	private boolean checkForSqrlAuthInProgress(final HttpServletRequest request, final HttpServletResponse response)
-			throws SqrlPersistenceException, IOException, ServletException {
-		// Check for SQRL auth in progress so we can show spinner
-		final SqrlCorrelator sqrlCorrelator = sqrlServerOperations.fetchSqrlCorrelator(request);
-		if (sqrlCorrelator != null
-				&& sqrlCorrelator.getAuthenticationStatus() == SqrlAuthenticationStatus.COMMUNICATING) {
-			// Authentication is in progress since we've received a SQRL client request with the SQRL nut token
-			// we embedded in the QR code/SQRL url. Show the spinner
-			final String b64 = new StringBuilder("data:image/gif;base64, ").append(getSpinner()).toString();
-			request.setAttribute(Constants.JSP_SUBTITLE, "SQRL authetication in progress...");
-			request.setAttribute("sqrlqr64", b64);
-			request.setAttribute("sqrlurl", "login");
-			request.setAttribute("sqrlqrdesc", "SQRL authetication in progress...");
-			request.setAttribute("sqrlstate", SqrlAuthenticationStatus.COMMUNICATING.toString());
-			request.setAttribute("correlator", sqrlCorrelator.getCorrelatorString());
-			request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
-			return true;
-		} else {
-			return false;
 		}
 	}
 
@@ -151,7 +124,7 @@ public class LoginPageServlet extends HttpServlet {
 			sqrlServerOperations.deleteSqrlCorrelator(sqrlCorrelator);
 			// Now process the AUTH_COMPLETE state
 			if (sqrlIdentity == null) {
-				logger.warn("Correaltor status return AUTH_COMPLETE but use isn't authenticated");
+				logger.warn("Correaltor status return AUTH_COMPLETE but user isn't authenticated");
 				return false;
 			}
 			final HttpSession session = request.getSession(true);
