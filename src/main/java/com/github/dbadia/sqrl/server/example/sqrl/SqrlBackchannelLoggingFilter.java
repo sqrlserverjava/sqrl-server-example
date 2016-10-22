@@ -16,6 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Filter to log the backchannel communication with SQRL clients
+ * 
+ * @author Dave Badia
+ *
+ */
 @WebFilter(filterName = "SqrlBackchannelLoggingFilter", urlPatterns = { "/sqrlbc" })
 public class SqrlBackchannelLoggingFilter implements Filter {
 	private final static Logger logger = LoggerFactory.getLogger(SqrlBackchannelLoggingFilter.class);
