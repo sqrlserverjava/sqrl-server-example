@@ -85,4 +85,10 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<scm>
+		<connection>scm:git:git@github.com:sqrlserverjava/sqrl-server-example.git</connection>
+		<developerConnection>scm:git:git@github.com:sqrlserverjava/sqrl-server-example.git</developerConnection>
+		<url>git@github.com:sqrlserverjava/sqrl-server-example.git</url>
+	</scm>
 </project>
