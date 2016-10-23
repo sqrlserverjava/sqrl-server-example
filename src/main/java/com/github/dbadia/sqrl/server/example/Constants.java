@@ -9,9 +9,6 @@ public class Constants {
 	private static final String	PACKAGE_NAME								= Constants.class.getPackage().getName();
 	private static final Map<String, String>	ERROR_MESSAGE_TABLE = new ConcurrentHashMap<>();
 
-	// TODO: remove since we use atmosphere to send status
-	public static final String	COOKIE_PREVIOUS_PAGE_SYNC_PREVIOUS_STATUS	= "previousState";
-
 	public static final String	SESSION_NATIVE_APP_USER	= PACKAGE_NAME + ".nativeAppUser";
 	public static final String	SESSION_SQRL_IDENTITY	= PACKAGE_NAME + ".sqrlIdentity";
 

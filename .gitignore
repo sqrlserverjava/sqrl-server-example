@@ -10,3 +10,8 @@ persistenceVpsMysql.xml
 jetty.bat
 removeoldwarcommand.txt
 deploy.bat
+gradle/
+gradlew
+gradlew.bat
+build.gradle
+settings.gradle

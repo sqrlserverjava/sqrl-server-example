@@ -136,8 +136,6 @@ public class LoginPageServlet extends HttpServlet {
 				nativeAppUser = AppDatastore.getInstance().fetchUserById(Long.parseLong(nativeUserXref));
 			}
 			final boolean existingAppUser = nativeAppUser != null;
-			// Page sync cookie was specific to the example app, so delete it now
-			Util.deleteCookies(request, response, Constants.COOKIE_PREVIOUS_PAGE_SYNC_PREVIOUS_STATUS);
 			if (existingAppUser) {
 				session.setAttribute(Constants.SESSION_NATIVE_APP_USER, nativeAppUser);
 				sendUserToAppPage(response);

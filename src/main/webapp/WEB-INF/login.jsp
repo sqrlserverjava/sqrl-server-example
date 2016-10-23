@@ -93,7 +93,6 @@
 		    	var myObject = new Object();
 		    	myObject.correlator = '<%=(String) request.getAttribute("correlator")%>';
 		    	myObject.status = 'redirect';
-		        // subSocket.push(JSON.stringify(myObject));  TODO: remove
 		        var correlatorValue = '<%=(String) request.getAttribute("correlator")%>';
             	subSocket.push(atmosphere.util.stringifyJSON({ correlator: correlatorValue, status: 'redirect' }));
             	window.location.replace('login');
