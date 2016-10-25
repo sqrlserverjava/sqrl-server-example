@@ -21,7 +21,7 @@
 <script
 	src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.9/atmosphere.js"
 	integrity="sha384-kEZYqgB6RKmKV1XMZ4PGovfLJJYOvrNTFgISdiH1Q3uuiQu/LdkRVdw186CtYbv2" crossorigin="anonymous"></script>
-	<script>window.jQuery || /* reload from own domain here */;</script>
+	<!-- <script>window.jQuery || /* TODO reload from own domain here */;</script> -->
 </head>
 <body>
 
