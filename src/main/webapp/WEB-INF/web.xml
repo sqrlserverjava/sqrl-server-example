@@ -10,7 +10,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>AtmosphereServlet</servlet-name>
-    <url-pattern>/sqrlauthwebsocket/*</url-pattern>
+    <url-pattern>/sqrlauthpolling/*</url-pattern>
   </servlet-mapping>
   <listener>
     <listener-class>org.atmosphere.cpr.SessionSupport</listener-class>

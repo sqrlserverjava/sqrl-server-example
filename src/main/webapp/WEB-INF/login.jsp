@@ -7,14 +7,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
-	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+	integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <script
-	src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"> 
+	integrity="sha384-o6l2EXLcx4A+q7ls2O2OP2Lb2W7iBgOsYvuuRI6G+Efbjbk6J4xbirJpHZZoHbfs" crossorigin="anonymous"</script>
+<!--<script>window.jQuery || /* reload from own domain here */;</script>-->
+
 <script
-	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+	 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </head>
 <script
-	src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.9/atmosphere.js"></script>
+	src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.9/atmosphere.js"
+	integrity="sha384-kEZYqgB6RKmKV1XMZ4PGovfLJJYOvrNTFgISdiH1Q3uuiQu/LdkRVdw186CtYbv2" crossorigin="anonymous"></script>
+	<script>window.jQuery || /* reload from own domain here */;</script>
 </head>
 <body>
 
@@ -59,12 +66,13 @@
 		</div>
 	</div>
 
+	<!-- TODO: move to outside of body tag -->
 	<!-- Include javascript here for readability. Real apps would move it to the server -->
 	<script>
     $(document).ready(function() {
 	// Atmosphere stuff for auto refresh
 	var socket = atmosphere;
-	var atmosphereurl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/")) +'/sqrlauthwebsocket';
+	var atmosphereurl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/")) +'/sqrlauthpolling';
     var request = { url: atmosphereurl,
             contentType: "application/json",
             logLevel: 'debug',
@@ -91,10 +99,8 @@
 				window.location.replace('login?error='+status);
 			} else if(status == 'AUTH_COMPLETE') {
 		    	var myObject = new Object();
-		    	myObject.correlator = '<%=(String) request.getAttribute("correlator")%>';
 		    	myObject.status = 'redirect';
-		        var correlatorValue = '<%=(String) request.getAttribute("correlator")%>';
-            	subSocket.push(atmosphere.util.stringifyJSON({ correlator: correlatorValue, status: 'redirect' }));
+            	subSocket.push(JSON.stringify(myObject));
             	window.location.replace('login');
 			} else {
 				// Not sure what else to do so just reload
@@ -114,7 +120,6 @@
         var subSocket = socket.subscribe(request);
 
     	var myObject = new Object();
-    	myObject.correlator = '<%=(String) request.getAttribute("correlator")%>';
     	myObject.status = '<%=(String) request.getAttribute("sqrlstate")%>';
         subSocket.push(JSON.stringify(myObject));
         
