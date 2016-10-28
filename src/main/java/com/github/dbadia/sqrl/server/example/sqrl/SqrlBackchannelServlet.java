@@ -48,7 +48,7 @@ public class SqrlBackchannelServlet extends HttpServlet {
 
 	private void initializeIfNecessary() throws SqrlException {
 		if (!initialized.get()) {
-			sqrlConfig = SqrlConfigHelper.loadFromClasspath();;
+			sqrlConfig = SqrlConfigHelper.loadFromClasspath();
 			sqrlServerOps = new SqrlServerOperations(sqrlConfig);
 			initialized.set(true);
 		}

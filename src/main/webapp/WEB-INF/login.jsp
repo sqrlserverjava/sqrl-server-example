@@ -118,10 +118,7 @@
         };
       
         var subSocket = socket.subscribe(request);
-
-    	var myObject = new Object();
-    	myObject.status = '<%=(String) request.getAttribute("sqrlstate")%>';
-        subSocket.push(JSON.stringify(myObject));
+        subSocket.push('<%=(String) request.getAttribute("sqrlstate")%>');
         
 		var sqrlImgSrc = $("#sqrlImg").attr('src');
 		var showingSqrlQr = sqrlImgSrc != 'spinner.gif';
