@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import com.github.dbadia.sqrl.server.SqrlAuthPageData;
 import com.github.dbadia.sqrl.server.SqrlAuthenticationStatus;
 import com.github.dbadia.sqrl.server.SqrlConfig;
-import com.github.dbadia.sqrl.server.SqrlConfigHelper;
-import com.github.dbadia.sqrl.server.SqrlException;
 import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.data.SqrlCorrelator;
 import com.github.dbadia.sqrl.server.data.SqrlIdentity;
@@ -32,6 +30,8 @@ import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.example.data.AppDatastore;
 import com.github.dbadia.sqrl.server.example.data.AppUser;
+import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
+import com.github.dbadia.sqrl.server.util.SqrlException;
 
 /**
  * Servlet which is called during various login actions.
@@ -228,31 +228,35 @@ public class LoginPageServlet extends HttpServlet {
 	}
 
 	void showLoginPage(final HttpServletRequest request, final HttpServletResponse response, final String subtitle)
-			throws ServletException, IOException, SqrlException {
+			throws ServletException, IOException {
 		if (Util.isBlank(subtitle)) {
 			request.setAttribute(Constants.JSP_SUBTITLE, "Login Page");
 		} else {
 			request.setAttribute(Constants.JSP_SUBTITLE, subtitle);
 		}
 		// Default action, show the login page with a new SQRL QR code
-		final SqrlAuthPageData pageData = sqrlServerOperations.buildQrCodeForAuthPage(request, response,
-				InetAddress.getByName(request.getRemoteAddr()), 250);
-		final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
-		baos.flush();
-		final byte[] imageInByteArray = baos.toByteArray();
-		baos.close();
-		// Since this is being passed to the browser, we use regular Base64 encoding, NOT SQRL specific
-		// Base64URL encoding
-		final String b64 = new StringBuilder("data:image/").append(pageData.getHtmlFileType(sqrlConfig))
-				.append(";base64, ").append(Base64.getEncoder().encodeToString(imageInByteArray)).toString();
-		request.setAttribute("sqrlqr64", b64);
-		request.setAttribute("sqrlurl", pageData.getUrl().toString());
-		request.setAttribute("sqrlqrdesc", "Click or scan to login with SQRL");
-		request.setAttribute("sqrlstate", SqrlAuthenticationStatus.CORRELATOR_ISSUED.toString());
-		request.setAttribute("correlator", pageData.getCorrelator());
-		logger.debug("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
-				pageData.getUrl().toString());
-		request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
+		try {
+			final SqrlAuthPageData pageData = sqrlServerOperations.buildQrCodeForAuthPage(request, response,
+					InetAddress.getByName(request.getRemoteAddr()), 250);
+			final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
+			baos.flush();
+			final byte[] imageInByteArray = baos.toByteArray();
+			baos.close();
+			// Since this is being passed to the browser, we use regular Base64 encoding, NOT SQRL specific
+			// Base64URL encoding
+			final String b64 = new StringBuilder("data:image/").append(pageData.getHtmlFileType(sqrlConfig))
+					.append(";base64, ").append(Base64.getEncoder().encodeToString(imageInByteArray)).toString();
+			request.setAttribute("sqrlqr64", b64);
+			request.setAttribute("sqrlurl", pageData.getUrl().toString());
+			request.setAttribute("sqrlqrdesc", "Click or scan to login with SQRL");
+			request.setAttribute("sqrlstate", SqrlAuthenticationStatus.CORRELATOR_ISSUED.toString());
+			request.setAttribute("correlator", pageData.getCorrelator());
+			logger.debug("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
+					pageData.getUrl().toString());
+			request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
+		} catch (final SqrlException e) {
+			redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
+		}
 	}
 
 	public static void redirectToLoginPageWithError(final HttpServletResponse response,

@@ -7,8 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import com.github.dbadia.sqrl.server.data.SqrlPersistenceException;
 import com.github.dbadia.sqrl.server.example.Constants;
+import com.github.dbadia.sqrl.server.exception.SqrlPersistenceException;
 
 /**
  * The datastore for the example app. This is unchanged vs pre-SQRL
