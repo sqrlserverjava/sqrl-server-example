@@ -7,11 +7,11 @@ import com.github.dbadia.sqrl.server.SqrlAuthenticationStatus;
  * We then map those codes to messages here
  */
 public enum ErrorId {
+	// @formatter:off
 	GENERIC(""),
 	SQRL_BAD_REQUEST("Invalid SQRL request"),
-	MISSING_PARAM_FOR_NEW_USER("Missing paramater for new user"), 
-	USER_NOT_FOUND("User not found"), 
-	ATTRIBUTES_NOT_FOUND("Attributes not found"), 
+	MISSING_PARAM_FOR_NEW_USER("Missing paramater for new user"),
+	ATTRIBUTES_NOT_FOUND("Attributes not found"),
 	/**
 	 * This matches {@link SqrlAuthenticationStatus#ERROR_SQRL_INTERNAL}
 	 */
@@ -21,7 +21,9 @@ public enum ErrorId {
 	 */
 	ERROR_BAD_REQUEST("SQRL client sent invalid request"),
 	SYSTEM_ERROR("System error"),
+	INVALID_USERNAME_OR_PASSWORD("Invalid username or password"),
 	;
+	// @formatter:on
 
 	private final String errorMessage;
 
@@ -34,7 +36,7 @@ public enum ErrorId {
 	}
 
 	public int getId() {
-		// Normally it's not safe to use ordinal, but in this case, if it 
+		// Normally it's not safe to use ordinal, but in this case, if it
 		// changes the whole app will get recompiled so it's ok
 		return this.ordinal();
 	}

@@ -20,9 +20,9 @@ import com.github.dbadia.sqrl.server.example.data.AppUser;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 
 @WebServlet(urlPatterns = { "/app" })
-public class AppPageServlet extends HttpServlet {
+public class RenderUserStatusPageServlet extends HttpServlet {
 	private static final long	serialVersionUID	= 2614632407392158693L;
-	private static final Logger	logger				= LoggerFactory.getLogger(AppPageServlet.class);
+	private static final Logger	logger				= LoggerFactory.getLogger(RenderUserStatusPageServlet.class);
 
 	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(
 			SqrlConfigHelper.loadFromClasspath());
@@ -36,7 +36,7 @@ public class AppPageServlet extends HttpServlet {
 		}
 		if (user == null) {
 			logger.error("user is not in session, redirecting to login page");
-			LoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ATTRIBUTES_NOT_FOUND);
+			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ATTRIBUTES_NOT_FOUND);
 			return;
 		}
 

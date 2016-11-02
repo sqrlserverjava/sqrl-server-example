@@ -47,7 +47,7 @@ public class UserSettingsServlet extends HttpServlet {
 					Constants.MAX_LENGTH_WELCOME_PHRASE);
 
 			if (Util.isBlank(givenName) || Util.isBlank(welcomePhrase)) {
-				LoginPageServlet.redirectToLoginPageWithError(response, ErrorId.MISSING_PARAM_FOR_NEW_USER);
+				RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.MISSING_PARAM_FOR_NEW_USER);
 				return;
 			}
 
@@ -56,7 +56,7 @@ public class UserSettingsServlet extends HttpServlet {
 			final SqrlIdentity sqrlIdentity = (SqrlIdentity) session.getAttribute(Constants.SESSION_SQRL_IDENTITY);
 
 			if (appUser == null && sqrlIdentity == null) {
-				LoginPageServlet.redirectToLoginPageWithError(response, ErrorId.USER_NOT_FOUND);
+				RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.INVALID_USERNAME_OR_PASSWORD);
 				return;
 			} else if (sqrlIdentity != null && appUser == null) {
 				appUser = enrollSqrlOnlyUser(sqrlIdentity, givenName, welcomePhrase);

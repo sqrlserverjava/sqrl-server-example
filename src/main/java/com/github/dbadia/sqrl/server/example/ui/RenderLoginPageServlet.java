@@ -48,10 +48,10 @@ import com.github.dbadia.sqrl.server.util.SqrlException;
  *
  */
 @WebServlet(urlPatterns = { "/login" }, loadOnStartup = 1)
-public class LoginPageServlet extends HttpServlet {
+public class RenderLoginPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 5609899766821704630L;
 
-	private static final Logger logger = LoggerFactory.getLogger(LoginPageServlet.class);
+	private static final Logger logger = LoggerFactory.getLogger(RenderLoginPageServlet.class);
 	private final SqrlConfig sqrlConfig = SqrlConfigHelper.loadFromClasspath();
 	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(sqrlConfig);
 
