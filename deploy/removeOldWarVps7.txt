@@ -1,3 +1,0 @@
-mv /opt/apache-tomcat-8.0.33/webapps/sqrlexample /opt/apache-tomcat-8.0.33/webapps/sqrlexample_$(date +%F-%T)
-rm /opt/apache-tomcat-8.0.33/webapps/sqrlexample.war
-rm -r /opt/apache-tomcat-8.0.33/webapps/sqrlexample
