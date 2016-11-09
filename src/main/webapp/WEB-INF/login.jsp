@@ -39,7 +39,7 @@
 				<h3>Username / password login</h3>
 				<p>
 					Username: (alphanumeric)<br />
-				<form action="login" method="post">
+				<form action="auth" method="post">
 					<input type="text" name="username" pattern="[a-zA-Z0-9]+"maxlength="10" required>
 					<br> Password:<br> 
 					<input type="password" name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required>

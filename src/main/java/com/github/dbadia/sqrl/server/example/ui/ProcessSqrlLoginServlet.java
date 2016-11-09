@@ -81,6 +81,7 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 			throws ServletException, IOException, SQLException, SqrlException {
 		// Check for SQRL auth complete
 		final SqrlCorrelator sqrlCorrelator = sqrlServerOperations.fetchSqrlCorrelator(request);
+		sqrlServerOperations.cleanSqrlAuthData(request, response);
 		if (sqrlCorrelator == null) {
 			return false;
 		}
@@ -92,12 +93,6 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 			return true;
 		} else if (SqrlAuthenticationStatus.AUTH_COMPLETE == authStatus) {
 			final SqrlIdentity sqrlIdentity = sqrlCorrelator.getAuthenticatedIdentity();
-			// We are now processing a correlator in the AUTH_COMPLETE state
-			// We must delete it from the database so it will not be processed again
-			// Otherwise this would become a second form of auth token (JSESSION id, etc)
-			sqrlServerOperations.deleteSqrlAuthCookies(request, response);
-			sqrlServerOperations.deleteSqrlCorrelator(sqrlCorrelator);
-			// Now process the AUTH_COMPLETE state
 			if (sqrlIdentity == null) {
 				logger.warn("Correaltor status return AUTH_COMPLETE but user isn't authenticated");
 				return false;

@@ -3,7 +3,6 @@ package com.github.dbadia.sqrl.server.example.ui;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.sql.SQLException;
 import java.util.Base64;
 
 import javax.servlet.ServletException;
@@ -12,7 +11,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,48 +19,28 @@ import com.github.dbadia.sqrl.server.SqrlAuthPageData;
 import com.github.dbadia.sqrl.server.SqrlAuthenticationStatus;
 import com.github.dbadia.sqrl.server.SqrlConfig;
 import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
-import com.github.dbadia.sqrl.server.data.SqrlCorrelator;
-import com.github.dbadia.sqrl.server.data.SqrlIdentity;
 import com.github.dbadia.sqrl.server.example.Constants;
 import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
-import com.github.dbadia.sqrl.server.example.data.AppDatastore;
-import com.github.dbadia.sqrl.server.example.data.AppUser;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.util.SqrlException;
 
 /**
- * Servlet which is called during various login actions.
- *
- * Specifically:
- * <li>1) to present the login page with SQRL option
- * <li>2) when a user logs in via username password &type=up
- * <li>3) when SQRL authentication completes
- *
- * Note that similar actions are taken in 2 and 3. With authentication complete, the users session is setup so they can
- * access the application
+ * Servlet renders the login page by perparing data then forwarding to login.jsp
  *
  * @author Dave Badia
  *
  */
-@WebServlet(urlPatterns = { "/login" }, loadOnStartup = 1)
+@WebServlet(urlPatterns = { "/login" })
 public class RenderLoginPageServlet extends HttpServlet {
-	private static final long serialVersionUID = 5609899766821704630L;
+	private static final long serialVersionUID = -849809318695746441L;
 
-	private static final Logger logger = LoggerFactory.getLogger(RenderLoginPageServlet.class);
-	private final SqrlConfig sqrlConfig = SqrlConfigHelper.loadFromClasspath();
-	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(sqrlConfig);
-
-	private final String spinnerB64Cache = null;
+	private static final Logger			logger					= LoggerFactory.getLogger(RenderLoginPageServlet.class);
+	private final SqrlConfig			sqrlConfig				= SqrlConfigHelper.loadFromClasspath();
+	private final SqrlServerOperations	sqrlServerOperations	= new SqrlServerOperations(sqrlConfig);
 
 	@Override
-	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
-			throws ServletException, IOException {
-		doPost(req, resp);
-	}
-
-	@Override
-	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
 		if (logger.isInfoEnabled()) {
 			final StringBuilder buf = new StringBuilder();
@@ -75,163 +53,23 @@ public class RenderLoginPageServlet extends HttpServlet {
 					buf.toString());
 		}
 		try {
-			final HttpSession session = request.getSession(false);
-			AppUser appUser = null;
-			if (session != null) {
-				appUser = (AppUser) session.getAttribute(Constants.SESSION_NATIVE_APP_USER);
-			}
-			final boolean requestContainsCorrelatorCookie = sqrlServerOperations
-					.extractSqrlCorrelatorStringFromRequestCookie(request) != null;
-			if (displayingErrorMessage(request, response, session)) {
-				// Nothing else to do, just fall through and return
-			} else if ("up".equals(request.getParameter("type"))) {
-				handleUsernamePasswordAuthentication(request, response);
-			} else if (appUser != null) {
-				// Is the user logged in but got here by mistake? If so, send them to the app page
-				logger.warn("Authenticated user reached login page, redirect to /app");
-				sendUserToAppPage(response);
-			} else if (requestContainsCorrelatorCookie && checkForSqrlAuthComplete(request, response)) { // TODO: remove
-				// Nothing else to do, just fall through and return
-			} else {
-				showLoginPage(request, response);
-			}
+			displayLoginPage(request, response);
 		} catch (final Exception e) {
 			throw new ServletException("Error rendering login page", e);
 		}
 	}
 
-	private boolean checkForSqrlAuthComplete(final HttpServletRequest request, final HttpServletResponse response)
-			throws ServletException, IOException, SQLException, SqrlException {
-		// Check for SQRL auth complete
-		final SqrlCorrelator sqrlCorrelator = sqrlServerOperations.fetchSqrlCorrelator(request);
-		if (sqrlCorrelator == null) {
-			return false;
+	public static void redirectToLoginPageWithError(final HttpServletResponse response, ErrorId errorId) {
+		if (errorId == null) {
+			errorId = ErrorId.GENERIC;
 		}
-		final SqrlAuthenticationStatus authStatus = sqrlCorrelator.getAuthenticationStatus();
-		if (authStatus.isErrorStatus()) {
-			// Error state
-			sqrlServerOperations.deleteSqrlCorrelator(sqrlCorrelator);
-			showLoginPage(request, response, "<font color='red'>SQRL protocol error: " + authStatus + "</font>");
-			return true;
-		} else if (SqrlAuthenticationStatus.AUTH_COMPLETE == authStatus) {
-			final SqrlIdentity sqrlIdentity = sqrlCorrelator.getAuthenticatedIdentity();
-			// We are now processing a correlator in the AUTH_COMPLETE state
-			// We must delete it from the database so it will not be processed again
-			// Otherwise this would become a second form of auth token (JSESSION id, etc)
-			sqrlServerOperations.deleteSqrlAuthCookies(request, response);
-			sqrlServerOperations.deleteSqrlCorrelator(sqrlCorrelator);
-			// Now process the AUTH_COMPLETE state
-			if (sqrlIdentity == null) {
-				logger.warn("Correaltor status return AUTH_COMPLETE but user isn't authenticated");
-				return false;
-			}
-			final HttpSession session = request.getSession(true);
-			session.setAttribute(Constants.SESSION_SQRL_IDENTITY, sqrlIdentity);
-			// The user has been SQRL authenticated, is this an existing app user?
-			final String nativeUserXref = sqrlIdentity.getNativeUserXref();
-			AppUser nativeAppUser = null;
-			if (nativeUserXref != null) {
-				nativeAppUser = AppDatastore.getInstance().fetchUserById(Long.parseLong(nativeUserXref));
-			}
-			final boolean existingAppUser = nativeAppUser != null;
-			if (existingAppUser) {
-				session.setAttribute(Constants.SESSION_NATIVE_APP_USER, nativeAppUser);
-				sendUserToAppPage(response);
-				return true;
-			} else {
-				// sqrlIdentity exists but NativeAppUser doesn't. Send them to enrollment page to see if they have a
-				// user name and password or are completely new
-				request.getRequestDispatcher("WEB-INF/linkaccountoption.jsp").forward(request, response);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private void sendUserToAppPage(final HttpServletResponse response) {
-		response.setHeader("Location", "app");
+		response.setHeader("Location", "login?error=" + errorId.getId());
 		response.setStatus(302);
 	}
 
-	private void handleUsernamePasswordAuthentication(final HttpServletRequest request,
-			final HttpServletResponse response) throws ServletException, IOException, SqrlException, SQLException {
-		// username / password auth?
-		if ("up".equals(request.getParameter("type"))) {
-			if (Util.isBlank(request.getParameter("username")) && Util.isBlank(request.getParameter("password"))) {
-				showLoginPage(request, response, "<font color='red'>System error: missing parameter</font>");
-				return;
-			}
-			// Check for login credentials
-			final String username = Util.sanitizeString(request.getParameter("username"),
-					Constants.MAX_LENGTH_GIVEN_NAME);
-			final String password = Util.sanitizeString(request.getParameter("password"),
-					Constants.MAX_LENGTH_GIVEN_NAME);
-
-			if (!password.equals(Constants.PASSWORD_FOR_ALL_USERS)) {
-				showLoginPage(request, response, "Invalid password");
-				return;
-			}
-			AppUser user = AppDatastore.getInstance().fetchUserByUsername(username);
-			final HttpSession session = request.getSession(true);
-			if (user == null || user.getGivenName() == null || user.getWelcomePhrase() == null) {
-				// This is a new user, create the user object, then send them to the enrollment page
-				user = new AppUser(username);
-				AppDatastore.getInstance().createUser(user);
-				session.setAttribute(Constants.SESSION_NATIVE_APP_USER, user);
-				request.getRequestDispatcher("usersettings.jsp").forward(request, response);
-				return;
-			} else {
-				session.setAttribute(Constants.SESSION_NATIVE_APP_USER, user);
-				sendUserToAppPage(response);
-			}
-		}
-	}
-
-	private boolean displayingErrorMessage(final HttpServletRequest request, final HttpServletResponse response,
-			final HttpSession session) throws ServletException, IOException, SqrlException {
-		final String errorParam = request.getParameter("error");
-		if(Util.isBlank(errorParam)) {
-			return false;
-		}
-		String errorMessage = null;
-		if(errorParam.startsWith("ERROR_")) {
-			try {
-				errorMessage = ErrorId.valueOf(errorParam).getErrorMessage();
-			} catch (final IllegalArgumentException e) {
-				logger.error("Error translating errorParam '{}' to ErrorId", errorParam, e);
-				errorMessage = ErrorId.GENERIC.getErrorMessage();
-			}
-		} else {
-			errorMessage = ErrorId.byId(Integer.parseInt(errorParam)).getErrorMessage();
-		}
-		final StringBuilder buf = new StringBuilder("An error occurred").append(errorMessage).append(".");
-		// If we have access to the correlator, append the first 5 chars to the message in case it gets reported
-		final String correlatorString = sqrlServerOperations.extractSqrlCorrelatorStringFromRequestCookie(request);
-		if(Util.isNotBlank(correlatorString)) {
-			buf.append("    code="+correlatorString.substring(0, 5));
-		}
-
-		// Since we are in an error state, kill the session
-		if(session != null) {
-			session.invalidate();
-		}
-		// Show a new login page with the error message
-		showLoginPage(request, response, Util.wrapErrorInRed(buf.toString()));
-		return true;
-	}
-
-	void showLoginPage(final HttpServletRequest request, final HttpServletResponse response)
-			throws ServletException, IOException, SqrlException {
-		showLoginPage(request, response, null);
-	}
-
-	void showLoginPage(final HttpServletRequest request, final HttpServletResponse response, final String subtitle)
+	private void displayLoginPage(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
-		if (Util.isBlank(subtitle)) {
-			request.setAttribute(Constants.JSP_SUBTITLE, "Login Page");
-		} else {
-			request.setAttribute(Constants.JSP_SUBTITLE, subtitle);
-		}
+		request.setAttribute(Constants.JSP_SUBTITLE, "Login Page");
 		// Default action, show the login page with a new SQRL QR code
 		try {
 			final SqrlAuthPageData pageData = sqrlServerOperations.buildQrCodeForAuthPage(request, response,
@@ -251,15 +89,43 @@ public class RenderLoginPageServlet extends HttpServlet {
 			request.setAttribute("correlator", pageData.getCorrelator());
 			logger.debug("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
 					pageData.getUrl().toString());
+
+			checkForErrorState(request, response);
 			request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
 		} catch (final SqrlException e) {
 			redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
 		}
 	}
 
-	public static void redirectToLoginPageWithError(final HttpServletResponse response,
-			final ErrorId errorId) {
-		response.setHeader("Location", "login?error="+errorId.getId());
-		response.setStatus(302);
+	private void checkForErrorState(final HttpServletRequest request, final HttpServletResponse response)
+			throws ServletException, IOException, SqrlException {
+		final String errorParam = request.getParameter("error");
+		if (Util.isBlank(errorParam)) {
+			return;
+		}
+		String errorMessage = null;
+		if (errorParam.startsWith("ERROR_")) {
+			try {
+				errorMessage = ErrorId.valueOf(errorParam).getErrorMessage();
+			} catch (final IllegalArgumentException e) {
+				logger.error("Error translating errorParam '{}' to ErrorId", errorParam, e);
+				errorMessage = ErrorId.GENERIC.getErrorMessage();
+			}
+		} else {
+			errorMessage = ErrorId.byId(Integer.parseInt(errorParam)).getErrorMessage();
+		}
+		final StringBuilder buf = new StringBuilder("An error occurred").append(errorMessage).append(".");
+		request.setAttribute(Constants.JSP_SUBTITLE, Util.wrapErrorInRed(buf.toString()));
+		// If we have access to the correlator, append the first 5 chars to the message in case it gets reported
+		final String correlatorString = sqrlServerOperations.extractSqrlCorrelatorStringFromRequestCookie(request);
+		if (Util.isNotBlank(correlatorString)) {
+			buf.append("    code=" + correlatorString.substring(0, 5));
+		}
+
+		// Since we are in an error state, kill the session
+		if (request.getSession(false) != null) {
+			request.getSession(false).invalidate();
+		}
 	}
+
 }

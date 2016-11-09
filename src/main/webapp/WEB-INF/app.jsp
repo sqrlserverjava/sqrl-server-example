@@ -15,7 +15,7 @@
 <body>
 <%
 	if(session.getAttribute("phrase") == null || session.getAttribute("givenname") == null) {
-		request.getRequestDispatcher("WEB-INF/error.jsp").forward(request, response);
+		request.getRequestDispatcher("login?error=0").forward(request, response);
 		return;
 	}
 %>
