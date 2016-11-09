@@ -134,6 +134,16 @@
 	    });
 
 	});
+    
+    function sqrlInProgress() {
+        this.firstName = firstName;  
+        this.lastName = lastName;
+        this.age = age;
+        this.eyeColor = eyeColor;
+        this.changeName = function (name) {
+            this.lastName = name;
+        };
+    }
 	
 
 	</script>
