@@ -54,6 +54,9 @@ public class AppDatastore {
 	}
 
 	public void createUser(final AppUser user) {
+		if (fetchUserByUsername(user.getUsername()) != null) {
+			throw new SqrlPersistenceException("AppUser already exists for username " + user.getUsername());
+		}
 		final EntityManager entityManager = entityManagerFactory.createEntityManager();
 		try {
 			entityManager.getTransaction().begin();

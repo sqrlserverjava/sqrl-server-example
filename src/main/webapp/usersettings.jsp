@@ -33,6 +33,7 @@
 				  <input type="submit" value="Submit">
 				</form>
 				<br/>
+				<br/>
 				<p><a href="logout">Cancel</a><p/>
 			</div>
 		</div>

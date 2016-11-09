@@ -19,10 +19,17 @@ import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.example.data.AppUser;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 
+/**
+ * This servlet renders the main page of the application which displays the users surname and their welcome phrase. It
+ * can be accessed via username/password auth or SQRL auth
+ *
+ * @author Dave Badia
+ *
+ */
 @WebServlet(urlPatterns = { "/app" })
-public class RenderUserStatusPageServlet extends HttpServlet {
-	private static final long	serialVersionUID	= 2614632407392158693L;
-	private static final Logger	logger				= LoggerFactory.getLogger(RenderUserStatusPageServlet.class);
+public class RenderAppPageServlet extends HttpServlet {
+	private static final long	serialVersionUID	= 6252981832657794489L;
+	private static final Logger	logger				= LoggerFactory.getLogger(RenderAppPageServlet.class);
 
 	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(
 			SqrlConfigHelper.loadFromClasspath());
@@ -34,21 +41,9 @@ public class RenderUserStatusPageServlet extends HttpServlet {
 		if (request.getSession(false) != null) {
 			user = (AppUser) request.getSession(false).getAttribute(Constants.SESSION_NATIVE_APP_USER);
 		}
-		if (user == null) {
+		if (user == null || Util.isBlank(user.getGivenName()) || Util.isBlank(user.getWelcomePhrase())) {
 			logger.error("user is not in session, redirecting to login page");
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ATTRIBUTES_NOT_FOUND);
-			return;
-		}
-
-		if (Util.isBlank(user.getGivenName()) || Util.isBlank(user.getWelcomePhrase())) {
-			// New user got here by accident, send them to the new user enroll page
-			// request.getRequestDispatcher("WEB-INF/usersettings.jsp").forward(request, response);
-			// TODO: do we need the logic above?
-
-			// sqrlIdentity exists but NativeAppUser doesn't. Send them to enrollment page to see if they have a
-			// user name and password or are completely new
-			logger.error("first time SQRL user, redirecting to account link page");
-			request.getRequestDispatcher("WEB-INF/linkaccountoption.jsp").forward(request, response);
 			return;
 		}
 

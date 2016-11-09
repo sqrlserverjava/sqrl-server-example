@@ -6,22 +6,11 @@
 <title>SQRL Java Server Demo</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
-	integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<script
-	src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"> 
-	integrity="sha384-o6l2EXLcx4A+q7ls2O2OP2Lb2W7iBgOsYvuuRI6G+Efbjbk6J4xbirJpHZZoHbfs" crossorigin="anonymous"</script>
-<!--<script>window.jQuery || /* reload from own domain here */;</script>-->
-
-<script
-	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
-	 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<link rel="stylesheet"	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
+<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
-<script
-	src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.9/atmosphere.js"
-	integrity="sha384-kEZYqgB6RKmKV1XMZ4PGovfLJJYOvrNTFgISdiH1Q3uuiQu/LdkRVdw186CtYbv2" crossorigin="anonymous"></script>
-	<!-- <script>window.jQuery || /* TODO reload from own domain here */;</script> -->
+<script	src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.9/atmosphere.js"></script>
 </head>
 <body>
 
@@ -100,8 +89,7 @@
 			} else if(status == 'AUTH_COMPLETE') {
 		    	var myObject = new Object();
 		    	myObject.status = 'redirect';
-            	subSocket.push(JSON.stringify(myObject));
-            	window.location.replace('login');
+            	window.location.replace('sqrllogin');
 			} else {
 				// Not sure what else to do so just reload
 				window.location.replace('login');

@@ -30,19 +30,18 @@ import com.github.dbadia.sqrl.server.util.SqrlException;
 import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 /**
- * Servlet which is called when a user sense username and password for authentication
+ * Servlet which is called when the broser transmits the username and password for authentication
  *
  * @author Dave Badia
  *
  */
 @WebServlet(urlPatterns = { "/auth" })
-public class AuthServlet extends HttpServlet {
+public class ProcessLoginServlet extends HttpServlet {
 	private static final long serialVersionUID = -7055677482775924249L;
-	private static final Logger logger = LoggerFactory.getLogger(AuthServlet.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProcessLoginServlet.class);
 	private final SqrlConfig sqrlConfig = SqrlConfigHelper.loadFromClasspath();
 	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(sqrlConfig);
 
-	private final String spinnerB64Cache = null;
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
@@ -91,7 +90,7 @@ public class AuthServlet extends HttpServlet {
 			user = new AppUser(username);
 			AppDatastore.getInstance().createUser(user);
 			session.setAttribute(Constants.SESSION_NATIVE_APP_USER, user);
-			request.getRequestDispatcher("WEB-INF/usersettings.jsp").forward(request, response);
+			request.getRequestDispatcher("usersettings.jsp").forward(request, response);
 			return;
 		} else {
 			session.setAttribute(Constants.SESSION_NATIVE_APP_USER, user);

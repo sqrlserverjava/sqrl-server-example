@@ -21,8 +21,8 @@
 		<div class="row">
 			<div class="col-sm-6">
 				<p>You have been authenticated via SQRL. </p>
-				<p>If you have an existing username and password for this site that you would like to link your SQRL ID to, then login. <br/></p>
-				<p><a href="usersettingsrd">I don't have a username/password.  This is my first time logging in to this site</a><p/>				
+				<p>If you have an existing username and password for this site that you would like to link your SQRL ID to, then enter your credentials below. <br/></p>
+				<!-- <p><a href="usersettingsrd">I don't have a username/password.  This is my first time logging in to this site</a><p/>  -->				
 			</div>
 			<div class="col-sm-6">
 				<p>Username: (alphanumeric)<br/>
@@ -33,10 +33,13 @@
 				  <input type="hidden" name="type" value="up"><br>
 				  <input type="submit" value="Link Account">
 				 </form>
+				 <br/>
+				 <button onclick="location.href = 'usersettings.jsp';">I don't have a username/password</button>
 				  <br/>
 				  <br/>
-				  <p>Note: password is "sqrl" for all users.  You can create a new user with either authentication method (SQRL or username/password)</p>
-
+				 <p><a href="logout">Cancel</a><p/>
+				  <br/>
+				  <br/>
 			</div>
 		</div>
 	</div>

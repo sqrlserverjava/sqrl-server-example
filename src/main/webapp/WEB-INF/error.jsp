@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <%@page import="com.github.dbadia.sqrl.server.example.Constants"%>
 <html lang="en">
 <head>

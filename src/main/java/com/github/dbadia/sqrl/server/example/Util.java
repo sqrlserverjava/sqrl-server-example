@@ -14,8 +14,8 @@ public class Util {
 	private Util() {
 	}
 
-	public static String wrapErrorInRed(String errorMessage) {
-		StringBuilder buf = new StringBuilder("<font color='red'>");
+	public static String wrapErrorInRed(final String errorMessage) {
+		final StringBuilder buf = new StringBuilder("<font color='red'>");
 		buf.append(errorMessage);
 		buf.append("</font></p>");
 		return buf.toString();
@@ -89,4 +89,15 @@ public class Util {
 			}
 		}
 	}
+
+	public static String cookiesToString(final Cookie[] cookieArray) {
+		final StringBuilder buf = new StringBuilder();
+		if (cookieArray != null) {
+			for (final Cookie cookie : cookieArray) {
+				buf.append(cookie.getName()).append("=").append(cookie.getValue()).append("  ");
+			}
+		}
+		return buf.toString();
+	}
+
 }

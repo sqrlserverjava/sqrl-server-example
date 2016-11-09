@@ -24,9 +24,9 @@ import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 
 // TODO: what is the difference between this and LinkAccountServlet?
 @WebServlet(urlPatterns = { "/usersettings" })
-public class UserSettingsServlet extends HttpServlet {
+public class ProcessUserSettingsServlet extends HttpServlet {
 	private static final long serialVersionUID = 7534356830225738651L;
-	private static final Logger logger = LoggerFactory.getLogger(UserSettingsServlet.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProcessUserSettingsServlet.class);
 	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(
 			SqrlConfigHelper.loadFromClasspath());
 
