@@ -46,10 +46,10 @@ import com.github.dbadia.sqrl.server.util.SqrlException;
 public class ProcessSqrlLoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 5609899766821704630L;
 
-	private static final Logger logger = LoggerFactory.getLogger(ProcessSqrlLoginServlet.class);
-	private final SqrlConfig sqrlConfig = SqrlConfigHelper.loadFromClasspath();
-	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(sqrlConfig);
-
+	private static final Logger			logger					= LoggerFactory
+			.getLogger(ProcessSqrlLoginServlet.class);
+	private final SqrlConfig			sqrlConfig				= SqrlConfigHelper.loadFromClasspath();
+	private final SqrlServerOperations	sqrlServerOperations	= new SqrlServerOperations(sqrlConfig);
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
@@ -126,7 +126,6 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 		response.setStatus(302);
 	}
 
-
 	void showLoginPage(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException, SqrlException {
 		showLoginPage(request, response, null);
@@ -165,9 +164,8 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 	}
 
 	// TODO: remove and call login
-	public static void redirectToLoginPageWithError(final HttpServletResponse response,
-			final ErrorId errorId) {
-		response.setHeader("Location", "login?error="+errorId.getId());
+	public static void redirectToLoginPageWithError(final HttpServletResponse response, final ErrorId errorId) {
+		response.setHeader("Location", "login?error=" + errorId.getId());
 		response.setStatus(302);
 	}
 }

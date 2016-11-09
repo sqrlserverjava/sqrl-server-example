@@ -22,7 +22,8 @@ import javax.persistence.TemporalType;
 public class AppUser {
 
 	@Id
-	@TableGenerator(name = "app_user_gen", table = "app_db_id_gen", pkColumnName = "name", valueColumnName = "value", allocationSize = 1)
+	@TableGenerator(name = "app_user_gen", table = "app_db_id_gen", pkColumnName = "name", valueColumnName = "value",
+			allocationSize = 1)
 	@GeneratedValue(generator = "app_user_gen")
 	@Column(name = "id")
 	private long id;

@@ -25,8 +25,8 @@ import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 public class LinkAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 5609899766821704630L;
 
-	private static final Logger logger = LoggerFactory.getLogger(LinkAccountServlet.class);
-	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(
+	private static final Logger			logger					= LoggerFactory.getLogger(LinkAccountServlet.class);
+	private final SqrlServerOperations	sqrlServerOperations	= new SqrlServerOperations(
 			SqrlConfigHelper.loadFromClasspath());
 
 	@Override

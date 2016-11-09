@@ -23,8 +23,8 @@ import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
  */
 @WebServlet(name = "SqrlExampleLogout", urlPatterns = { "/logout" })
 public class LogoutServlet extends HttpServlet {
-	private static final Logger logger = LoggerFactory.getLogger(LogoutServlet.class);
-	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(
+	private static final Logger			logger					= LoggerFactory.getLogger(LogoutServlet.class);
+	private final SqrlServerOperations	sqrlServerOperations	= new SqrlServerOperations(
 			SqrlConfigHelper.loadFromClasspath());
 
 	@Override

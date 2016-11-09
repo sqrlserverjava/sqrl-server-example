@@ -17,8 +17,8 @@ import com.github.dbadia.sqrl.server.exception.SqrlPersistenceException;
  *
  */
 public class AppDatastore {
-	private static final AppDatastore INSTANCE = new AppDatastore();
-	private static EntityManagerFactory entityManagerFactory = Persistence
+	private static final AppDatastore	INSTANCE				= new AppDatastore();
+	private static EntityManagerFactory	entityManagerFactory	= Persistence
 			.createEntityManagerFactory(Constants.APP_PERSISTENCE_UNIT_NAME);
 
 	public static AppDatastore getInstance() {

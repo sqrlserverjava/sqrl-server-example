@@ -32,12 +32,11 @@ import com.github.dbadia.sqrl.server.util.SqrlUtil;
  */
 @WebServlet(urlPatterns = { "/auth" })
 public class ProcessLoginServlet extends HttpServlet {
-	private static final long			serialVersionUID		= 3182250009216737995L;
+	private static final long serialVersionUID = 3182250009216737995L;
 
 	private static final Logger			logger					= LoggerFactory.getLogger(ProcessLoginServlet.class);
 	private final SqrlConfig			sqrlConfig				= SqrlConfigHelper.loadFromClasspath();
 	private final SqrlServerOperations	sqrlServerOperations	= new SqrlServerOperations(sqrlConfig);
-
 
 	@Override
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)

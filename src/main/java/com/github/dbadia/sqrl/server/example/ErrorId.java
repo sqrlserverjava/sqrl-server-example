@@ -3,8 +3,7 @@ package com.github.dbadia.sqrl.server.example;
 import com.github.dbadia.sqrl.server.SqrlAuthenticationStatus;
 
 /**
- * To prevent XSS attacks, errors are passed as codes in the query string.
- * We then map those codes to messages here
+ * To prevent XSS attacks, errors are passed as codes in the query string. We then map those codes to messages here
  */
 public enum ErrorId {
 	// @formatter:off
@@ -29,8 +28,8 @@ public enum ErrorId {
 
 	private ErrorId(final String errorMessage) {
 		String toSet = errorMessage;
-		if(Util.isNotBlank(errorMessage)) {
-			toSet = ": "+errorMessage;
+		if (Util.isNotBlank(errorMessage)) {
+			toSet = ": " + errorMessage;
 		}
 		this.errorMessage = toSet;
 	}
@@ -46,7 +45,7 @@ public enum ErrorId {
 	}
 
 	public static ErrorId byId(final int id) {
-		if(id < 0 || id >= ErrorId.values().length) {
+		if (id < 0 || id >= ErrorId.values().length) {
 			return ErrorId.GENERIC;
 		}
 		return ErrorId.values()[id];
