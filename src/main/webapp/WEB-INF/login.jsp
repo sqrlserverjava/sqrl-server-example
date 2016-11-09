@@ -17,7 +17,7 @@
 	<div class="container">
 		<div class="jumbotron">
 			<h1>SQRL Java Server Demo</h1>
-			<p><%=request.getAttribute(com.github.dbadia.sqrl.server.example.Constants.JSP_SUBTITLE)%></p>
+			<p id="subtitle"><%=request.getAttribute(com.github.dbadia.sqrl.server.example.Constants.JSP_SUBTITLE)%></p>
 		</div>
 		<div class="row">
 			<div class="col-sm-4">
@@ -90,9 +90,12 @@
 		    	var myObject = new Object();
 		    	myObject.status = 'redirect';
             	window.location.replace('sqrllogin');
+			} else if(status == 'COMMUNICATING'){
+				// The user scanned the QR code and sqrl auth is in progress
+				// TODO: do all stuff when clicked, extract that to method
 			} else {
 				// Not sure what else to do so just reload
-				window.location.replace('login');
+				window.location.replace('login?error=0');
 			}
         };
 
@@ -124,6 +127,10 @@
 	    	if(showingSqrlQr) {
 	    		window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
 	    	}
+	    	if(subtitle.innerText.includes("error")) {
+	    		subtitle.innerText = "";
+	    	}
+	    	
 	    });
 
 	});
