@@ -82,6 +82,9 @@ public class RenderLoginPageServlet extends HttpServlet {
 			// Base64URL encoding
 			final String b64 = new StringBuilder("data:image/").append(pageData.getHtmlFileType(sqrlConfig))
 					.append(";base64, ").append(Base64.getEncoder().encodeToString(imageInByteArray)).toString();
+			// TODO: add doc FAQ link
+			final int pageRefreshSeconds = sqrlConfig.getNutValidityInSeconds() / 2;
+			request.setAttribute(Constants.JSP_PAGE_REFRESH_SECONDS, Integer.toString(pageRefreshSeconds));
 			request.setAttribute("sqrlqr64", b64);
 			request.setAttribute("sqrlurl", pageData.getUrl().toString());
 			request.setAttribute("sqrlqrdesc", "Click or scan to login with SQRL");
