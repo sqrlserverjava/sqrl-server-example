@@ -4,12 +4,10 @@
 <html lang="en">
 <head>
 <title>SQRL Java Server Demo</title>
-<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
 <script	src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-</head>
 <script	src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.9/atmosphere.js"></script>
 </head>
 <body>
@@ -23,24 +21,22 @@
 			<div class="col-sm-4">
 				<h4 id="instruction"><%=(String) request.getAttribute("sqrlqrdesc")%></h4>
 				<p>
-					<img id="sqrlImg"
+					<img id="sqrlImg" onclick="sqrlInProgress()"
 						src="<%=(String) request.getAttribute("sqrlqr64")%>"
 						alt="<%=(String) request.getAttribute("sqrlqrdesc")%>" />
 				</p>
-				<a id="cancel" href="logout">Cancel SQRL authentication</a>
+				<a id="cancel"  href="logout">Cancel SQRL authentication</a>
 			</div>
 			<div id="or" class="col-sm-4 ">
 				<br />
-				<p>
 				<h3 class="text-center">OR</h3>
-				</p>
 			</div>
 			<div id="uplogin" class="col-sm-4">
 				<h3>Username / password login</h3>
 				<p>
 					Username: (alphanumeric)<br />
 				<form action="auth" method="post">
-					<input type="text" name="username" pattern="[a-zA-Z0-9]+"maxlength="10" required>
+					<input type="text" name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required>
 					<br> Password:<br> 
 					<input type="password" name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required>
 					<br> 
@@ -54,13 +50,42 @@
 			</div>
 		</div>
 	</div>
+</body>
 
 	<!-- TODO: move to outside of body tag -->
 	<!-- Include javascript here for readability. Real apps would move it to the server -->
 	<script>
+	// http://stackoverflow.com/a/11663507/2863942
+	if(!window.console){ window.console = {log: function(){} }; } 
+	
+	function sqrlInProgress() {
+		var sqrlImgSrc = $("#sqrlImg").attr('src');
+		var showingSqrlQr = sqrlImgSrc != 'spinner.gif';
+    	if(!showingSqrlQr) {
+    		return;
+    	}
+		$("#cancel").hide();
+   		window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
+    	$("#uplogin").hide();
+    	$("#or").hide();
+        $("#sqrlImg").attr("src", "spinner.gif");
+        instruction.innerText = "Waiting for SQRL client";
+		$("#cancel").show();
+    	if(subtitle.innerText.indexOf("error") >=0 ) {
+    		subtitle.innerText = "";
+    	}
+	}
+	
+	function stopPolling(socket, subsocket, request) {
+		subsocket.push('done');
+		socket.close();
+	}
+	
     $(document).ready(function() {
+    $("#cancel").hide();
 	// Atmosphere stuff for auto refresh
 	var socket = atmosphere;
+	var subsocket;
 	var atmosphereurl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/")) +'/sqrlauthpolling';
     var request = { url: atmosphereurl,
             contentType: "application/json",
@@ -70,82 +95,49 @@
             fallbackTransport: 'long-polling'};
 
         request.onOpen = function (response) {
-        	console.log('Atmosphere connected using ' + response.transport );
+        	console.debug('Atmosphere connected using ' + response.transport );
         };
         
         request.onReconnect = function (request, response) {
-            console.log('Connection lost, trying to reconnect. Trying to reconnect ' + request.reconnectInterval);
+            console.info('Atmosphere connection lost, trying to reconnect ' + request.reconnectInterval);
         };
 
         request.onReopen = function (response) {
-            console.log('Atmosphere re-connected using ' + response.transport );
+        	console.info('Atmosphere re-connected using ' + response.transport );
         };
 
         request.onMessage = function (response) {
             status = response.responseBody;
-			console.log('received from server: ' + event.data);
-			if (status.startsWith('ERROR_')) {
+			console.debug('received from server: ' + status);
+			if (status.indexOf('ERROR_') > 0) {
 				window.location.replace('login?error='+status);
 			} else if(status == 'AUTH_COMPLETE') {
-		    	var myObject = new Object();
-		    	myObject.status = 'redirect';
+				subsocket.push('done');
+				subsocket.close();
             	window.location.replace('sqrllogin');
 			} else if(status == 'COMMUNICATING'){
 				// The user scanned the QR code and sqrl auth is in progress
-				// TODO: do all stuff when clicked, extract that to method
+				subsocket.push('COMMUNICATING');
+				sqrlInProgress();
 			} else {
-				// Not sure what else to do so just reload
+				console.error('recevied unknown state from server: ' + event.data);
+            	stopPolling(subsocket, request);
 				window.location.replace('login?error=0');
 			}
         };
 
         request.onClose = function (response) {
-        	console.log('Server closed the connection after a timeout');
+        	console.info('Server closed the connection after a timeout');
         };
 
         request.onError = function (response) {
-            console.log('Sorry, but there\'s some problem with your '
+            console.error('Error, there\'s some problem with your ' 
                 + 'socket or the server is down');
         };
       
-        var subSocket = socket.subscribe(request);
-        subSocket.push('<%=(String) request.getAttribute("sqrlstate")%>');
+        subsocket = socket.subscribe(request);
+        subsocket.push('<%=(String) request.getAttribute("sqrlstate")%>');
         
-		var sqrlImgSrc = $("#sqrlImg").attr('src');
-		var showingSqrlQr = sqrlImgSrc != 'spinner.gif';
-
-		if(showingSqrlQr) {
-			$("#cancel").hide();
-		}
-		
-	    $("#sqrlImg").on('click', function() {
-	    	$("#uplogin").hide();
-	    	$("#or").hide();
-	        $("#sqrlImg").attr("src", "spinner.gif");
-	        instruction.innerText = "Waiting for SQRL client";
-			$("#cancel").show();
-	    	if(showingSqrlQr) {
-	    		window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
-	    	}
-	    	if(subtitle.innerText.includes("error")) {
-	    		subtitle.innerText = "";
-	    	}
-	    	
-	    });
-
 	});
-    
-    function sqrlInProgress() {
-        this.firstName = firstName;  
-        this.lastName = lastName;
-        this.age = age;
-        this.eyeColor = eyeColor;
-        this.changeName = function (name) {
-            this.lastName = name;
-        };
-    }
-	
-
 	</script>
-</body>
 </html>

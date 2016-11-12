@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
+import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 
 /**
@@ -36,12 +37,17 @@ public class LogoutServlet extends HttpServlet {
 	@Override
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
-		final HttpSession session = request.getSession(false);
-		if (session != null) {
-			session.invalidate();
+		try {
+			final HttpSession session = request.getSession(false);
+			if (session != null) {
+				session.invalidate();
+			}
+			sqrlServerOperations.deleteSqrlAuthCookies(request, response);
+			response.setStatus(302);
+			response.setHeader("Location", "login");
+		} catch (final Exception e) {
+			logger.error("Error in LinkAccountServlet", e);
+			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}
-		sqrlServerOperations.deleteSqrlAuthCookies(request, response);
-		response.setStatus(302);
-		response.setHeader("Location", "login");
 	}
 }

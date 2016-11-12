@@ -49,7 +49,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 					buf.append(cookie.getName()).append("=").append(cookie.getValue()).append("  ");
 				}
 			}
-			logger.info("In do post for /login with params: {}.  cookies: {}", request.getParameterMap(),
+			logger.info("In do get for /login with params: {}.  cookies: {}", request.getParameterMap(),
 					buf.toString());
 		}
 		try {

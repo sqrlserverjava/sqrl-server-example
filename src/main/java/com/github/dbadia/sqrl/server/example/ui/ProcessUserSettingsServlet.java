@@ -69,7 +69,8 @@ public class ProcessUserSettingsServlet extends HttpServlet {
 				enrollUsernameOnlyUserOrModify(appUser, givenName, welcomePhrase);
 			}
 		} catch (final Exception e) {
-			logger.error("Error in NewUserServlet", e);
+			logger.error("Error processing user settings", e);
+			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}
 		// Send them to the app screen
 		response.setHeader("Location", "app");

@@ -37,27 +37,32 @@ public class RenderAppPageServlet extends HttpServlet {
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
-		AppUser user = null;
-		if (request.getSession(false) != null) {
-			user = (AppUser) request.getSession(false).getAttribute(Constants.SESSION_NATIVE_APP_USER);
-		}
-		if (user == null || Util.isBlank(user.getGivenName()) || Util.isBlank(user.getWelcomePhrase())) {
-			logger.error("user is not in session, redirecting to login page");
-			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ATTRIBUTES_NOT_FOUND);
-			return;
-		}
+		try {
+			AppUser user = null;
+			if (request.getSession(false) != null) {
+				user = (AppUser) request.getSession(false).getAttribute(Constants.SESSION_NATIVE_APP_USER);
+			}
+			if (user == null || Util.isBlank(user.getGivenName()) || Util.isBlank(user.getWelcomePhrase())) {
+				logger.error("user is not in session, redirecting to login page");
+				RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ATTRIBUTES_NOT_FOUND);
+				return;
+			}
 
-		String accountType = "Username/password only";
-		if (user.getUsername() == null) {
-			accountType = "SQRL only";
-		} else if (sqrlServerOperations.fetchSqrlIdentityByUserXref(Long.toString(user.getId())) != null) {
-			accountType = "Both SQRL and username/password";
+			String accountType = "Username/password only";
+			if (user.getUsername() == null) {
+				accountType = "SQRL only";
+			} else if (sqrlServerOperations.fetchSqrlIdentityByUserXref(Long.toString(user.getId())) != null) {
+				accountType = "Both SQRL and username/password";
+			}
+			final HttpSession session = request.getSession(false);
+			session.setAttribute("givenname", user.getGivenName());
+			session.setAttribute("phrase", user.getWelcomePhrase());
+			session.setAttribute("accounttype", accountType);
+			request.getRequestDispatcher("WEB-INF/app.jsp").forward(request, response);
+		} catch (final Exception e) {
+			logger.error("Error rendering app page", e);
+			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}
-		final HttpSession session = request.getSession(false);
-		session.setAttribute("givenname", user.getGivenName());
-		session.setAttribute("phrase", user.getWelcomePhrase());
-		session.setAttribute("accounttype", accountType);
-		request.getRequestDispatcher("WEB-INF/app.jsp").forward(request, response);
 	}
 
 }

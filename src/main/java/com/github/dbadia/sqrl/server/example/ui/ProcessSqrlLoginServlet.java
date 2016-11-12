@@ -73,7 +73,8 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 				redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
 			}
 		} catch (final Exception e) {
-			throw new ServletException("Error rendering login page", e);
+			logger.error("Error processing username/password login ", e);
+			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}
 	}
 
