@@ -18,7 +18,4 @@
 	<session-config>
 		<session-timeout>15</session-timeout>
 	</session-config>
-	<error-page>
-		<location>/login?error=0</location>
-	</error-page>
 </web-app>
