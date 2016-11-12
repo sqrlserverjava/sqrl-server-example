@@ -56,7 +56,7 @@
 	<!-- Include javascript here for readability. Real apps would move it to the server -->
 	<script>
 	// http://stackoverflow.com/a/11663507/2863942
-	if(!window.console){ window.console = {log: function(){} }; } 
+	// if(!window.console){ window.console = {log: function(){} }; } 
 	
 	function sqrlInProgress() {
 		var sqrlImgSrc = $("#sqrlImg").attr('src');

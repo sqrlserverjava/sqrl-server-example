@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Filter to log the backchannel communication with SQRL clients
- * 
+ *
  * @author Dave Badia
  *
  */
@@ -36,7 +36,7 @@ public class SqrlBackchannelLoggingFilter implements Filter {
 		for (final Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
 			buf.append(entry.getKey()).append("=").append(Arrays.toString(entry.getValue())).append("   ");
 		}
-		logger.error(buf.toString());
+		logger.info(buf.toString());
 		chain.doFilter(request, response);
 	}
 
