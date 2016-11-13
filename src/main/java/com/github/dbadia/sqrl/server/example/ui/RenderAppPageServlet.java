@@ -18,6 +18,7 @@ import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.example.data.AppUser;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
+import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 /**
  * This servlet renders the main page of the application which displays the users surname and their welcome phrase. It
@@ -37,6 +38,7 @@ public class RenderAppPageServlet extends HttpServlet {
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
+		logger.info(SqrlUtil.logEnterServlet(request));
 		try {
 			AppUser user = null;
 			if (request.getSession(false) != null) {

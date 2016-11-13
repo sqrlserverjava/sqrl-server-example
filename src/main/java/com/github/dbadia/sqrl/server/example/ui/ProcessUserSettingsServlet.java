@@ -21,8 +21,8 @@ import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.example.data.AppDatastore;
 import com.github.dbadia.sqrl.server.example.data.AppUser;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
+import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
-// TODO: what is the difference between this and LinkAccountServlet?
 @WebServlet(urlPatterns = { "/usersettings" })
 public class ProcessUserSettingsServlet extends HttpServlet {
 	private static final long			serialVersionUID		= 7534356830225738651L;
@@ -40,6 +40,7 @@ public class ProcessUserSettingsServlet extends HttpServlet {
 	@Override
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
+		logger.info(SqrlUtil.logEnterServlet(request));
 		try {
 			final HttpSession session = request.getSession();
 			final String givenName = Util.sanitizeString(request.getParameter("givenname"),

@@ -41,16 +41,7 @@ public class ProcessLoginServlet extends HttpServlet {
 	@Override
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO: move this whole logic to util, pass string
-		if (logger.isInfoEnabled()) {
-			logger.info("In do post for /auth with params: {}.  cookies: {}", request.getParameterMap(), // TODO: add
-					// method to
-					// show map
-					// ropertly
-					// and add
-					// to others
-					SqrlUtil.cookiesToString(request.getCookies()));
-		}
+		logger.info(SqrlUtil.logEnterServlet(request));
 		// Even though we aren't using SQRL auth, we should still cleanup the data
 		sqrlServerOperations.cleanSqrlAuthData(request, response);
 

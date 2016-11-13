@@ -10,7 +10,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Util {
+	public static final Logger logger = LoggerFactory.getLogger(Util.class);
+
 	private Util() {
 	}
 
@@ -99,5 +104,4 @@ public class Util {
 		}
 		return buf.toString();
 	}
-
 }

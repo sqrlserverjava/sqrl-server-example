@@ -21,6 +21,7 @@ import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.example.data.AppDatastore;
 import com.github.dbadia.sqrl.server.example.data.AppUser;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
+import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 @WebServlet(urlPatterns = { "/linkaccount" })
 public class LinkAccountServlet extends HttpServlet {
@@ -39,7 +40,7 @@ public class LinkAccountServlet extends HttpServlet {
 	@Override
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
-		logger.info("In do post for " + request.getRequestURI() + " with " + request.getParameterMap());
+		logger.info(SqrlUtil.logEnterServlet(request));
 		request.setAttribute(Constants.JSP_SUBTITLE, "Link Account Option");
 		final HttpSession session = request.getSession(true);
 		try {

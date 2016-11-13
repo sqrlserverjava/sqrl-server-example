@@ -122,8 +122,6 @@
 				sqrlInProgress();
 			} else {
 				console.error('recevied unknown state from server: ' + event.data);
-            	stopPolling(subsocket, request);
-				window.location.replace('login?error=0');
 			}
         };
 

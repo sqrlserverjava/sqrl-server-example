@@ -29,6 +29,7 @@ import com.github.dbadia.sqrl.server.example.data.AppDatastore;
 import com.github.dbadia.sqrl.server.example.data.AppUser;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.util.SqrlException;
+import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 /**
  * Once SQRL auth is initiated, the browser polls the server to understand when SQRL auth is complete; once the browser
@@ -60,17 +61,14 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 	@Override
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
-		if (logger.isInfoEnabled()) {
-			logger.info("In do post for /sqrllogin with params: {}.  cookies: {}", request.getParameterMap(),
-					Util.cookiesToString(request.getCookies()));
-		}
+		logger.info(SqrlUtil.logEnterServlet(request));
 		try {
 			final boolean requestContainsCorrelatorCookie = sqrlServerOperations
 					.extractSqrlCorrelatorStringFromRequestCookie(request) != null;
 			if (requestContainsCorrelatorCookie && checkForSqrlAuthComplete(request, response)) {
 				// Nothing else to do, just fall through and return
 			} else {
-				redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
+				RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
 			}
 		} catch (final Exception e) {
 			logger.error("Error processing username/password login ", e);
@@ -141,7 +139,7 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 		}
 		// Default action, show the login page with a new SQRL QR code
 		try {
-			final SqrlAuthPageData pageData = sqrlServerOperations.buildQrCodeForAuthPage(request, response,
+			final SqrlAuthPageData pageData = sqrlServerOperations.prepareSqrlAuthPageData(request, response,
 					InetAddress.getByName(request.getRemoteAddr()), 250);
 			final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
 			baos.flush();
@@ -160,13 +158,7 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 					pageData.getUrl().toString());
 			request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
 		} catch (final SqrlException e) {
-			redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
+			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
 		}
-	}
-
-	// TODO: remove and call login
-	public static void redirectToLoginPageWithError(final HttpServletResponse response, final ErrorId errorId) {
-		response.setHeader("Location", "login?error=" + errorId.getId());
-		response.setStatus(302);
 	}
 }

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
+import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 /**
  * Servlet which handles logout requests
@@ -37,6 +38,7 @@ public class LogoutServlet extends HttpServlet {
 	@Override
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
+		logger.info(SqrlUtil.logEnterServlet(request));
 		try {
 			final HttpSession session = request.getSession(false);
 			if (session != null) {

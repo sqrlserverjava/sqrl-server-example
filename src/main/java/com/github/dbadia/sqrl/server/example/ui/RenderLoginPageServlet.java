@@ -7,7 +7,6 @@ import java.util.Base64;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +23,7 @@ import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.util.SqrlException;
+import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 /**
  * Servlet renders the login page by perparing data then forwarding to login.jsp
@@ -42,16 +42,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
-		if (logger.isInfoEnabled()) {
-			final StringBuilder buf = new StringBuilder();
-			if (request.getCookies() != null) { // TODO: move to util cookies to string
-				for (final Cookie cookie : request.getCookies()) {
-					buf.append(cookie.getName()).append("=").append(cookie.getValue()).append("  ");
-				}
-			}
-			logger.info("In do get for /login with params: {}.  cookies: {}", request.getParameterMap(),
-					buf.toString());
-		}
+		logger.info(SqrlUtil.logEnterServlet(request));
 		try {
 			displayLoginPage(request, response);
 		} catch (final Exception e) {
@@ -72,7 +63,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 		request.setAttribute(Constants.JSP_SUBTITLE, "Login Page");
 		// Default action, show the login page with a new SQRL QR code
 		try {
-			final SqrlAuthPageData pageData = sqrlServerOperations.buildQrCodeForAuthPage(request, response,
+			final SqrlAuthPageData pageData = sqrlServerOperations.prepareSqrlAuthPageData(request, response,
 					InetAddress.getByName(request.getRemoteAddr()), 250);
 			final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
 			baos.flush();
