@@ -69,7 +69,7 @@
    		window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
     	$("#uplogin").hide();
     	$("#or").hide();
-        $("#sqrlImg").attr("src", "spinner.gif");
+        //$("#sqrlImg").attr("src", "spinner.gif");
         instruction.innerText = "Waiting for SQRL client";
 		$("#cancel").show();
     	if(subtitle.innerText.indexOf("error") >=0 ) {
@@ -121,7 +121,7 @@
 				subsocket.push('COMMUNICATING');
 				sqrlInProgress();
 			} else {
-				console.error('recevied unknown state from server: ' + event.data);
+				console.error('recevied unknown state from server: ' + status);
 			}
         };
 
