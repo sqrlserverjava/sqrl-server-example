@@ -24,10 +24,10 @@ import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 @WebServlet(urlPatterns = { "/linkaccount" })
-public class LinkAccountServlet extends HttpServlet {
+public class ProcessLinkAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 5609899766821704630L;
 
-	private static final Logger			logger					= LoggerFactory.getLogger(LinkAccountServlet.class);
+	private static final Logger			logger					= LoggerFactory.getLogger(ProcessLinkAccountServlet.class);
 	private final SqrlServerOperations	sqrlServerOperations	= new SqrlServerOperations(
 			SqrlConfigHelper.loadFromClasspath());
 
@@ -53,6 +53,7 @@ public class LinkAccountServlet extends HttpServlet {
 				// We have a valid user to link
 				final SqrlIdentity sqrlIdentity = (SqrlIdentity) session.getAttribute(Constants.SESSION_SQRL_IDENTITY);
 				sqrlServerOperations.updateNativeUserXref(sqrlIdentity, Long.toString(user.getId()));
+				session.setAttribute(Constants.SESSION_NATIVE_APP_USER, user);
 				// All done, send them to the app page
 				response.setHeader("Location", "app");
 				response.setStatus(302); // we use 302 to make it easy to understand what the example app is doing, but
