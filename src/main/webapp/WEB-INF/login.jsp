@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="refresh" content="<%=request.getAttribute(com.github.dbadia.sqrl.server.example.Constants.JSP_PAGE_REFRESH_SECONDS)%>">
 <link rel="stylesheet"	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
-<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script	src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.9/atmosphere.js"></script>
+<script	type="text/javascript"  src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script	type="text/javascript"  src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script	type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.12/atmosphere.js"></script>
 </head>
 <body>
 
@@ -57,7 +57,28 @@
 	<!-- Include javascript here for readability. Real apps would move it to the server -->
 	<script>
 	// http://stackoverflow.com/a/11663507/2863942
-	// if(!window.console){ window.console = {log: function(){} }; } 
+	// Avoid `console` errors in browsers that lack a console.
+	(function() {
+	    var method;
+	    var noop = function () {};
+	    var methods = [
+	        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+	        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+	        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+	        'timeStamp', 'trace', 'warn'
+	    ];
+	    var length = methods.length;
+	    var console = (window.console = window.console || {});
+	
+	    while (length--) {
+	        method = methods[length];
+	
+	        // Only stub undefined methods.
+	        if (!console[method]) {
+	            console[method] = noop;
+	        }
+	    }
+	}());
 	
 	function sqrlInProgress() {
 		var sqrlImgSrc = $("#sqrlImg").attr('src');
@@ -69,7 +90,7 @@
    		window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
     	$("#uplogin").hide();
     	$("#or").hide();
-        //$("#sqrlImg").attr("src", "spinner.gif");
+        $("#sqrlImg").attr("src", "spinner.gif");
         instruction.innerText = "Waiting for SQRL client";
 		$("#cancel").show();
     	if(subtitle.innerText.indexOf("error") >=0 ) {
@@ -109,19 +130,19 @@
 
         request.onMessage = function (response) {
             status = response.responseBody;
-			console.debug('received from server: ' + status);
+			console.error('received from server: ' + status);
 			if (status.indexOf('ERROR_') > 0) {
 				window.location.replace('login?error='+status);
 			} else if(status == 'AUTH_COMPLETE') {
-				subsocket.push('done');
+				subsocket.push(atmosphere.util.stringifyJSON({ state: 'AUTH_COMPLETE' }));
 				subsocket.close();
             	window.location.replace('sqrllogin');
 			} else if(status == 'COMMUNICATING'){
 				// The user scanned the QR code and sqrl auth is in progress
-				subsocket.push('COMMUNICATING');
+				subsocket.push(atmosphere.util.stringifyJSON({ state: 'COMMUNICATING' }));
 				sqrlInProgress();
 			} else {
-				console.error('recevied unknown state from server: ' + status);
+				console.error('received unknown state from server: ' + status);
 			}
         };
 
@@ -135,8 +156,7 @@
         };
       
         subsocket = socket.subscribe(request);
-        subsocket.push('<%=(String) request.getAttribute("sqrlstate")%>');
-        
+        subsocket.push(atmosphere.util.stringifyJSON({ state: '<%=(String) request.getAttribute("sqrlstate")%>' }));
 	});
 	</script>
 </html>
