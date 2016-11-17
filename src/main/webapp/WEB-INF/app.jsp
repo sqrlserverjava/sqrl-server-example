@@ -32,7 +32,7 @@
 				<br/>
 				<p>Account type:  <%=(String) session.getAttribute("accounttype")%></p>
 				<br/>
-				<p><a href="logout">Logout</a><p/>
+				<p><a href="logout">Logout</a></p>
 			</div>
 		</div>
 	</div>
