@@ -42,6 +42,11 @@ public class ProcessLoginServlet extends HttpServlet {
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
 		logger.info(SqrlUtil.logEnterServlet(request));
+		// Bootstrap IE compatibility
+		// http://v4-alpha.getbootstrap.com/getting-started/browsers-devices/#ie-compatibility-modes -->
+		// http://stackoverflow.com/questions/11095319/how-to-fix-document-mode-restart-in-ie-9
+		response.setHeader("X-UA-Compatible", "IE=edge");
+
 		// Even though we aren't using SQRL auth, we should still cleanup the data
 		sqrlServerOperations.cleanSqrlAuthData(request, response);
 

@@ -5,14 +5,11 @@
 <head>
 <title>SQRL Java Server Demo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Bootstrap IE compatibility  http://v4-alpha.getbootstrap.com/getting-started/browsers-devices/#ie-compatibility-modes -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="refresh" content="<%=request.getAttribute(com.github.dbadia.sqrl.server.example.Constants.JSP_PAGE_REFRESH_SECONDS)%>">
 <link rel="stylesheet"	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
 <!--[if lt IE 9]><script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><![endif]-->
-<!--[if IE 9]><!--><script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script><!--<![endif]-->
+<!--[if IE 9]><!--><script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><!--<![endif]-->
 
-<script	type="text/javascript"  src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script	type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.12/atmosphere.js"></script>
 	<!-- Include javascript here for readability. Real apps would move it to the server -->
 	<script>
