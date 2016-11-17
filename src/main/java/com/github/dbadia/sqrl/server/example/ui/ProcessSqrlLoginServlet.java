@@ -152,7 +152,6 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 			request.setAttribute("sqrlqr64", b64);
 			request.setAttribute("sqrlurl", pageData.getUrl().toString());
 			request.setAttribute("sqrlqrdesc", "Click or scan to login with SQRL");
-			request.setAttribute("sqrlstate", SqrlAuthenticationStatus.CORRELATOR_ISSUED.toString());
 			request.setAttribute("correlator", pageData.getCorrelator());
 			logger.debug("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
 					pageData.getUrl().toString());
