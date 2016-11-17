@@ -14,50 +14,6 @@
 
 <script	type="text/javascript"  src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script	type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.12/atmosphere.js"></script>
-</head>
-<body>
-
-	<div class="container">
-		<div class="jumbotron">
-			<h1>SQRL Java Server Demo</h1>
-			<p id="subtitle"><%=request.getAttribute(com.github.dbadia.sqrl.server.example.Constants.JSP_SUBTITLE)%></p>
-		</div>
-		<div class="row">
-			<div class="col-sm-4">
-				<h4 id="instruction"><%=(String) request.getAttribute("sqrlqrdesc")%></h4>
-				<p>
-					<img id="sqrlImg" onclick="sqrlInProgress()"
-						src="<%=(String) request.getAttribute("sqrlqr64")%>"
-						alt="<%=(String) request.getAttribute("sqrlqrdesc")%>" />
-				</p>
-				<a id="cancel"  href="logout">Cancel SQRL authentication</a>
-			</div>
-			<div id="or" class="col-sm-4 ">
-				<br />
-				<h3 class="text-center">OR</h3>
-			</div>
-			<div id="uplogin" class="col-sm-4">
-				<h3>Username / password login</h3>
-				<p>
-					Username: (alphanumeric)<br />
-				<form action="auth" method="post">
-					<input type="text" name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required>
-					<br> Password:<br> 
-					<input type="password" name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required>
-					<br> 
-					<input type="hidden" name="type" value="up"><br> <input type="submit" value="Submit">
-				</form>
-				<br /> <br />
-				<p>
-					Note: password is "sqrl" for all users.<br />
-				<p>You can create a new user with either authentication method</p>
-				<br />
-			</div>
-		</div>
-	</div>
-</body>
-
-	<!-- TODO: move to outside of body tag -->
 	<!-- Include javascript here for readability. Real apps would move it to the server -->
 	<script>
 	// http://stackoverflow.com/a/11663507/2863942
@@ -164,4 +120,46 @@
         subsocket.push(atmosphere.util.stringifyJSON({ state: 'CORRELATOR_ISSUED' }));
 	});
 	</script>
+</head>
+<body>
+
+	<div class="container">
+		<div class="jumbotron">
+			<h1>SQRL Java Server Demo</h1>
+			<p id="subtitle"><%=request.getAttribute(com.github.dbadia.sqrl.server.example.Constants.JSP_SUBTITLE)%></p>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<h4 id="instruction"><%=(String) request.getAttribute("sqrlqrdesc")%></h4>
+				<p>
+					<img id="sqrlImg" onclick="sqrlInProgress()"
+						src="<%=(String) request.getAttribute("sqrlqr64")%>"
+						alt="<%=(String) request.getAttribute("sqrlqrdesc")%>" />
+				</p>
+				<a id="cancel"  href="logout">Cancel SQRL authentication</a>
+			</div>
+			<div id="or" class="col-sm-4 ">
+				<br />
+				<h3 class="text-center">OR</h3>
+			</div>
+			<div id="uplogin" class="col-sm-4">
+				<h3>Username / password login</h3>
+				<p>
+					Username: (alphanumeric)<br />
+				<form action="auth" method="post">
+					<input type="text" name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required>
+					<br> Password:<br> 
+					<input type="password" name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required>
+					<br> 
+					<input type="hidden" name="type" value="up"><br> <input type="submit" value="Submit">
+				</form>
+				<br /> <br />
+				<p>
+					Note: password is "sqrl" for all users.<br />
+				<p>You can create a new user with either authentication method</p>
+				<br />
+			</div>
+		</div>
+	</div>
+</body>
 </html>

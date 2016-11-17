@@ -46,8 +46,7 @@ public class ProcessLinkAccountServlet extends HttpServlet {
 		try {
 			final AppUser user = validateRequestAndAuthenticateAppUser(request, response);
 			if (user == null) {
-				request.setAttribute(Constants.JSP_SUBTITLE, Util.wrapErrorInRed("Invalid username or password"));
-				request.getRequestDispatcher("WEB-INF/linkaccountoption.jsp").forward(request, response);
+				// validateRequestAndAuthenticateAppUser set error text and forwarded as needed
 				return;
 			} else {
 				// We have a valid user to link
@@ -83,7 +82,21 @@ public class ProcessLinkAccountServlet extends HttpServlet {
 			return null;
 		}
 
-		return AppDatastore.getInstance().fetchUserByUsername(username);
+		final AppUser appUser = AppDatastore.getInstance().fetchUserByUsername(username);
+		if(appUser == null) {
+			// No such user
+			request.setAttribute(Constants.JSP_SUBTITLE, Util.wrapErrorInRed("Invalid username or password"));
+			request.getRequestDispatcher("WEB-INF/linkaccountoption.jsp").forward(request, response);
+			return null;
+		} else if (sqrlServerOperations.fetchSqrlIdentityByUserXref(Long.toString(appUser.getId())) != null) {
+			request.setAttribute(Constants.JSP_SUBTITLE,
+					Util.wrapErrorInRed(" Another SQRL ID has already been linked to this username"));
+			request.getRequestDispatcher("WEB-INF/linkaccountoption.jsp").forward(request, response);
+			return null;
+		} else {
+			// All good, let the user by linked
+			return appUser;
+		}
 	}
 
 }
