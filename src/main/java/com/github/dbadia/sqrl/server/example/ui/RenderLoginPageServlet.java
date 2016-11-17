@@ -15,9 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dbadia.sqrl.server.SqrlAuthPageData;
-import com.github.dbadia.sqrl.server.SqrlAuthenticationStatus;
 import com.github.dbadia.sqrl.server.SqrlConfig;
-import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
+import com.github.dbadia.sqrl.server.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.example.Constants;
 import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
@@ -79,9 +78,8 @@ public class RenderLoginPageServlet extends HttpServlet {
 			request.setAttribute("sqrlqr64", b64);
 			request.setAttribute("sqrlurl", pageData.getUrl().toString());
 			request.setAttribute("sqrlqrdesc", "Click or scan to login with SQRL");
-			request.setAttribute("sqrlstate", SqrlAuthenticationStatus.CORRELATOR_ISSUED.toString());
 			request.setAttribute("correlator", pageData.getCorrelator());
-			logger.debug("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
+			logger.info("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
 					pageData.getUrl().toString());
 
 			checkForErrorState(request, response);

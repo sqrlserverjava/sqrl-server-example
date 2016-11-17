@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
+import com.github.dbadia.sqrl.server.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.util.SqrlUtil;
@@ -23,9 +23,9 @@ import com.github.dbadia.sqrl.server.util.SqrlUtil;
  * @author Dave Badia
  *
  */
-@WebServlet(name = "SqrlExampleLogout", urlPatterns = { "/logout" })
-public class LogoutServlet extends HttpServlet {
-	private static final Logger			logger					= LoggerFactory.getLogger(LogoutServlet.class);
+@WebServlet(urlPatterns = { "/logout" })
+public class ProcessLogoutServlet extends HttpServlet {
+	private static final Logger			logger					= LoggerFactory.getLogger(ProcessLogoutServlet.class);
 	private final SqrlServerOperations	sqrlServerOperations	= new SqrlServerOperations(
 			SqrlConfigHelper.loadFromClasspath());
 

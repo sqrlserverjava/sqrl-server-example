@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dbadia.sqrl.server.SqrlConfig;
-import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
+import com.github.dbadia.sqrl.server.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.util.SqrlException;
 import com.github.dbadia.sqrl.server.util.SqrlUtil;

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
+import com.github.dbadia.sqrl.server.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.data.SqrlIdentity;
 import com.github.dbadia.sqrl.server.example.Constants;
 import com.github.dbadia.sqrl.server.example.ErrorId;

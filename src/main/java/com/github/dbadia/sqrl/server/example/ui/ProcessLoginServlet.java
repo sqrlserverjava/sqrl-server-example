@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dbadia.sqrl.server.SqrlConfig;
-import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
+import com.github.dbadia.sqrl.server.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.example.Constants;
 import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
@@ -42,7 +42,7 @@ public class ProcessLoginServlet extends HttpServlet {
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
 		logger.info(SqrlUtil.logEnterServlet(request));
-		// Bootstrap IE compatibility
+		// Set X-UA-Compatible for bootstrap IE compatibility:
 		// http://v4-alpha.getbootstrap.com/getting-started/browsers-devices/#ie-compatibility-modes -->
 		// http://stackoverflow.com/questions/11095319/how-to-fix-document-mode-restart-in-ie-9
 		response.setHeader("X-UA-Compatible", "IE=edge");

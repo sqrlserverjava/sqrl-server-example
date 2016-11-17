@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.github.dbadia.sqrl.server.SqrlAuthPageData;
 import com.github.dbadia.sqrl.server.SqrlAuthenticationStatus;
 import com.github.dbadia.sqrl.server.SqrlConfig;
-import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
+import com.github.dbadia.sqrl.server.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.data.SqrlCorrelator;
 import com.github.dbadia.sqrl.server.data.SqrlIdentity;
 import com.github.dbadia.sqrl.server.example.Constants;

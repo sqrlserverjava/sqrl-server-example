@@ -27,7 +27,7 @@
 			<div class="col-sm-4">
 				<form action="usersettings"  method="post">
 				  Given name:  <br>
-				  <input type="text" name="givenname" pattern="[a-zA-Z]+"  maxlength="10" required><br>
+				  <input type="text" name="givenname" pattern="[a-zA-Z0-9]+"  maxlength="10" required><br>
 				  Welcome phrase:  (letters and numbers only)<br>
 				  <input type="text" name="phrase" pattern="[a-zA-Z0-9 ]+"  maxlength="40" required><br>
 				  <input type="submit" value="Submit">
