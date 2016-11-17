@@ -1,8 +1,6 @@
 package com.github.dbadia.sqrl.server.example.sqrl;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.ServletException;
@@ -18,6 +16,7 @@ import com.github.dbadia.sqrl.server.SqrlConfig;
 import com.github.dbadia.sqrl.server.backchannel.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.util.SqrlException;
+import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 /**
  * The backchannel servlet will handle SQRL client calls only. No user side html is served from here.
@@ -40,13 +39,7 @@ public class SqrlBackchannelServlet extends HttpServlet {
 		try {
 			initializeIfNecessary();
 			if (logger.isInfoEnabled()) {
-				final StringBuilder buf = new StringBuilder("== Received from SQRL client ");
-				final String sqrlAgentString = request.getHeader("user-agent");
-				buf.append("'").append(sqrlAgentString).append("'   ");
-				for (final Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
-					buf.append(entry.getKey()).append("=").append(Arrays.toString(entry.getValue())).append("   ");
-				}
-				logger.info(buf.toString());
+				logger.info(SqrlUtil.buildLogMessageForSqrlClientRequest(request).toString());
 			}
 			sqrlServerOps.handleSqrlClientRequest(request, response);
 		} catch (final SqrlException e) {
