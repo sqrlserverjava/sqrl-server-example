@@ -89,7 +89,7 @@
         };
 
         request.onMessage = function (response) {
-            status = response.responseBody;
+        	var status = response.responseBody;
 			console.error('received from server: ' + status);
 			if (status.indexOf('ERROR_') > 0) {
 				window.location.replace('login?error='+status);
