@@ -38,8 +38,8 @@
 	}());
 	
 	function sqrlInProgress() {
-		var sqrlImgSrc = $("#sqrlImg").attr('src');
-		var showingSqrlQr = sqrlImgSrc != 'spinner.gif';
+		var sqrlImgSrc = $("#sqrlImg").attr("src");
+		var showingSqrlQr = sqrlImgSrc != "spinner.gif";
     	if(!showingSqrlQr) {
     		return;
     	}
@@ -56,7 +56,7 @@
 	}
 	
 	function stopPolling(socket, subsocket, request) {
-		subsocket.push('done');
+		subsocket.push("done");
 		socket.close();
 	}
 	
@@ -65,56 +65,56 @@
 	// Atmosphere stuff for auto refresh
 	var socket = atmosphere;
 	var subsocket;
-	var atmosphereurl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/")) +'/sqrlauthpolling';
+	var atmosphereurl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/")) +"/sqrlauthpolling";
     var request = { url: atmosphereurl,
             contentType: "application/json",
-            logLevel: 'debug',
-            transport: 'sse',
+            logLevel: "debug",
+            transport: "sse",
             reconnectInterval: 5000,
-            fallbackTransport: 'long-polling'};
+            fallbackTransport: "long-polling"};
 
         request.onOpen = function (response) {
-        	console.debug('Atmosphere connected using ' + response.transport );
+        	console.debug("Atmosphere connected using " + response.transport );
         };
         
         request.onReconnect = function (request, response) {
-            console.info('Atmosphere connection lost, trying to reconnect ' + request.reconnectInterval);
+            console.info("Atmosphere connection lost, trying to reconnect " + request.reconnectInterval);
         };
 
         request.onReopen = function (response) {
-        	console.info('Atmosphere re-connected using ' + response.transport );
+        	console.info("Atmosphere re-connected using " + response.transport );
         };
 
         request.onMessage = function (response) {
         	var status = response.responseBody;
-			console.error('received from server: ' + status);
-			if (status.indexOf('ERROR_') > 0) {
-				window.location.replace('login?error='+status);
-			} else if(status == 'AUTH_COMPLETE') {
-				subsocket.push(atmosphere.util.stringifyJSON({ state: 'AUTH_COMPLETE' }));
+			console.error("received from server: " + status);
+			if (status.indexOf("ERROR_") > -1) {
+				window.location.replace("login?error="+status);
+			} else if(status == "AUTH_COMPLETE") {
+				subsocket.push(atmosphere.util.stringifyJSON({ state: "AUTH_COMPLETE" }));
 				subsocket.close();
-            	window.location.replace('sqrllogin');
-			} else if(status == 'COMMUNICATING'){
+            	window.location.replace("sqrllogin");
+			} else if(status == "COMMUNICATING"){
 				// The user scanned the QR code and sqrl auth is in progress
 				instruction.innerText = "Communicating with SQRL client";
-				subsocket.push(atmosphere.util.stringifyJSON({ state: 'COMMUNICATING' }));
+				subsocket.push(atmosphere.util.stringifyJSON({ state: "COMMUNICATING" }));
 				sqrlInProgress();
 			} else {
-				console.error('received unknown state from server: ' + status);
+				console.error("received unknown state from server: " + status);
 			}
         };
 
         request.onClose = function (response) {
-        	console.info('Server closed the connection after a timeout');
+        	console.info("Server closed the connection after a timeout");
         };
 
         request.onError = function (response) {
-            console.error('Error, there\'s some problem with your ' 
-                + 'socket or the server is down');
+            console.error("Error, there\'s some problem with your " 
+                + "socket or the server is down");
         };
       
         subsocket = socket.subscribe(request);
-        subsocket.push(atmosphere.util.stringifyJSON({ state: 'CORRELATOR_ISSUED' }));
+        subsocket.push(atmosphere.util.stringifyJSON({ state: "CORRELATOR_ISSUED" }));
 	});
 	</script>
 </head>
