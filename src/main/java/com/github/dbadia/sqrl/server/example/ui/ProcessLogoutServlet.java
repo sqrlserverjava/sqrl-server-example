@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.dbadia.sqrl.server.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.example.ErrorId;
+import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
 import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
@@ -45,6 +46,7 @@ public class ProcessLogoutServlet extends HttpServlet {
 				session.invalidate();
 			}
 			sqrlServerOperations.deleteSqrlAuthCookies(request, response);
+			Util.deleteAllCookies(request, response);
 			response.setStatus(302);
 			response.setHeader("Location", "login");
 		} catch (final Exception e) {
