@@ -14,11 +14,15 @@ public enum ErrorId {
 	/**
 	 * This matches {@link SqrlAuthenticationStatus#ERROR_SQRL_INTERNAL}
 	 */
-	ERROR_SQRL_INTERNAL("Error processing SQRL request"),
+	ERROR_SQRL_INTERNAL("SQRL error"),
 	/**
 	 * This matches {@link SqrlAuthenticationStatus#ERROR_BAD_REQUEST}
 	 */
 	ERROR_BAD_REQUEST("SQRL client sent invalid request"),
+	/**
+	 * This matches {@link SqrlAuthenticationStatus#ERROR_SQRL_USER_DISABLED}
+	 */
+	ERROR_SQRL_USER_DISABLED("SQRL user is disabled"),
 	SYSTEM_ERROR("System error"),
 	INVALID_USERNAME_OR_PASSWORD("Invalid username or password"),
 	;

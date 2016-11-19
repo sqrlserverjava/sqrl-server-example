@@ -106,14 +106,14 @@ public class RenderLoginPageServlet extends HttpServlet {
 		} else {
 			errorMessage = ErrorId.byId(Integer.parseInt(errorParam)).getErrorMessage();
 		}
-		final StringBuilder buf = new StringBuilder("An error occurred").append(errorMessage).append(".");
-		request.setAttribute(Constants.JSP_SUBTITLE, Util.wrapErrorInRed(buf.toString()));
+		final StringBuilder buf = new StringBuilder("Error").append(errorMessage).append(".");
 		// If we have access to the correlator, append the first 5 chars to the message in case it gets reported
 		final String correlatorString = sqrlServerOperations.extractSqrlCorrelatorStringFromRequestCookie(request);
 		if (Util.isNotBlank(correlatorString)) {
 			buf.append("    code=" + correlatorString.substring(0, 5));
 		}
-
+		// Set it so it gets displayed
+		request.setAttribute(Constants.JSP_SUBTITLE, Util.wrapErrorInRed(buf.toString()));
 		// Since we are in an error state, kill the session
 		if (request.getSession(false) != null) {
 			request.getSession(false).invalidate();
