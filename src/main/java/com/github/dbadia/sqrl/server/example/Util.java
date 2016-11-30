@@ -78,6 +78,9 @@ public class Util {
 	}
 
 	public static void deleteAllCookies(final HttpServletRequest request, final HttpServletResponse response) {
+		if (request == null || request.getCookies() == null) {
+			return;
+		}
 		for (final Cookie cookie : request.getCookies()) {
 			cookie.setMaxAge(0);
 			response.addCookie(cookie);
