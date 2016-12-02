@@ -20,8 +20,8 @@ import com.github.dbadia.sqrl.server.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.example.Constants;
 import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
+import com.github.dbadia.sqrl.server.exception.SqrlException;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
-import com.github.dbadia.sqrl.server.util.SqrlException;
 import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 /**
@@ -72,7 +72,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 			// Base64URL encoding
 			final String b64 = new StringBuilder("data:image/").append(pageData.getHtmlFileType(sqrlConfig))
 					.append(";base64, ").append(Base64.getEncoder().encodeToString(imageInByteArray)).toString();
-			// TODO: add doc FAQ link
+			// TODO_DOC add doc FAQ link
 			final int pageRefreshSeconds = sqrlConfig.getNutValidityInSeconds() / 2;
 			request.setAttribute(Constants.JSP_PAGE_REFRESH_SECONDS, Integer.toString(pageRefreshSeconds));
 			request.setAttribute("sqrlqr64", b64);

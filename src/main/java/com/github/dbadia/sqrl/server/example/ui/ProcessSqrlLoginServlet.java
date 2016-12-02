@@ -20,15 +20,15 @@ import com.github.dbadia.sqrl.server.SqrlAuthPageData;
 import com.github.dbadia.sqrl.server.SqrlAuthenticationStatus;
 import com.github.dbadia.sqrl.server.SqrlConfig;
 import com.github.dbadia.sqrl.server.SqrlServerOperations;
-import com.github.dbadia.sqrl.server.data.SqrlCorrelator;
-import com.github.dbadia.sqrl.server.data.SqrlIdentity;
 import com.github.dbadia.sqrl.server.example.Constants;
 import com.github.dbadia.sqrl.server.example.ErrorId;
 import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.example.data.AppDatastore;
 import com.github.dbadia.sqrl.server.example.data.AppUser;
+import com.github.dbadia.sqrl.server.exception.SqrlException;
+import com.github.dbadia.sqrl.server.persistence.SqrlCorrelator;
+import com.github.dbadia.sqrl.server.persistence.SqrlIdentity;
 import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
-import com.github.dbadia.sqrl.server.util.SqrlException;
 import com.github.dbadia.sqrl.server.util.SqrlUtil;
 
 /**
@@ -85,9 +85,12 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 			return false;
 		}
 		final SqrlAuthenticationStatus authStatus = sqrlCorrelator.getAuthenticationStatus();
-		if (authStatus.isErrorStatus()) {
-			// Error state
+		if (authStatus.isUpdatesForThisCorrelatorComplete()) {
+			// Now that we have fetched the non-happy status, we can delete the correlator
+			// If we didn't it would still get cleaned up later
 			sqrlServerOperations.deleteSqrlCorrelator(sqrlCorrelator);
+		}
+		if (!authStatus.isHappyPath()) {
 			showLoginPage(request, response, "<font color='red'>SQRL protocol error: " + authStatus + "</font>");
 			return true;
 		} else if (SqrlAuthenticationStatus.AUTH_COMPLETE == authStatus) {

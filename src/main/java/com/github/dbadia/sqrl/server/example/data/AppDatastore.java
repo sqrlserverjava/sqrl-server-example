@@ -28,9 +28,10 @@ public class AppDatastore {
 	public AppUser fetchUserByUsername(final String username) {
 		final EntityManager entityManager = entityManagerFactory.createEntityManager();
 		try {
+			@SuppressWarnings("unchecked")
 			final List<AppUser> resultList = entityManager
-					.createQuery("SELECT u FROM AppUser u WHERE u.username = :aUsername")
-					.setParameter("aUsername", username).getResultList();
+			.createQuery("SELECT u FROM AppUser u WHERE u.username = :aUsername")
+			.setParameter("aUsername", username).getResultList();
 			if (resultList == null || resultList.isEmpty()) {
 				return null;
 			} else if (resultList.size() > 1) {

@@ -22,7 +22,7 @@ public enum ErrorId {
 	/**
 	 * This matches {@link SqrlAuthenticationStatus#ERROR_SQRL_USER_DISABLED}
 	 */
-	ERROR_SQRL_USER_DISABLED("SQRL user is disabled"),
+	SQRL_USER_DISABLED("SQRL user is disabled"),
 	SYSTEM_ERROR("System error"),
 	INVALID_USERNAME_OR_PASSWORD("Invalid username or password"),
 	;
