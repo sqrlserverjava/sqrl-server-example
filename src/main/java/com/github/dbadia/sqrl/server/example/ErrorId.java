@@ -1,6 +1,6 @@
 package com.github.dbadia.sqrl.server.example;
 
-import com.github.dbadia.sqrl.server.SqrlAuthenticationStatus;
+import com.github.dbadia.sqrl.server.enums.SqrlAuthenticationStatus;
 
 /**
  * To prevent XSS attacks, errors are passed as codes in the query string. We then map those codes to messages here
