@@ -6,12 +6,11 @@ mynotes.txt
 /bin/
 derby.log
 persistenceDaveMysql.xml
-persistenceVpsMysql.xml
-jetty.bat
-removeoldwarcommand.txt
-deploy.bat
+/.gradle/
 gradle/
 gradlew
 gradlew.bat
 build.gradle
 settings.gradle
+.classpath
+.project

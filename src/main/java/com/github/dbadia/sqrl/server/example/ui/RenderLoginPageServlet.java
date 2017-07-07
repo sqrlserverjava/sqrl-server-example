@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,17 +77,22 @@ public class RenderLoginPageServlet extends HttpServlet {
 			final int pageRefreshSeconds = sqrlConfig.getNutValidityInSeconds() / 2;
 			request.setAttribute(Constants.JSP_PAGE_REFRESH_SECONDS, Integer.toString(pageRefreshSeconds));
 			request.setAttribute("sqrlqr64", b64);
-			request.setAttribute("sqrlurl", pageData.getUrl().toString());
+			final String sqrlUrl = pageData.getUrl().toString();
+			request.setAttribute("sqrlurl", sqrlUrl);
+			// The url that will get sent to the SQRL client via CPS must include a cancel page (can) if case of failure
+			// TODO: add optional? can page
+			final String sqrlurlWithCan = sqrlUrl;
+			request.setAttribute("sqrlurlwithcan64", SqrlUtil.sqrlBase64UrlEncode(sqrlurlWithCan));
 			request.setAttribute("sqrlqrdesc", "Click or scan to login with SQRL");
 			request.setAttribute("correlator", pageData.getCorrelator());
 			logger.info("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
 					pageData.getUrl().toString());
-
 			checkForErrorState(request, response);
-			request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
 		} catch (final SqrlException e) {
-			redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
+			logger.error("Error rendering login page", e);
+			displayErrorAndKillSession(request, "Rendering error");
 		}
+		request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
 	}
 
 	private void checkForErrorState(final HttpServletRequest request, final HttpServletResponse response)
@@ -112,11 +118,16 @@ public class RenderLoginPageServlet extends HttpServlet {
 		if (Util.isNotBlank(correlatorString)) {
 			buf.append("    code=" + correlatorString.substring(0, 5));
 		}
+		displayErrorAndKillSession(request, buf.toString());
+	}
+
+	private void displayErrorAndKillSession(final HttpServletRequest request, final String errorText) {
 		// Set it so it gets displayed
-		request.setAttribute(Constants.JSP_SUBTITLE, Util.wrapErrorInRed(buf.toString()));
+		request.setAttribute(Constants.JSP_SUBTITLE, Util.wrapErrorInRed(errorText));
 		// Since we are in an error state, kill the session
-		if (request.getSession(false) != null) {
-			request.getSession(false).invalidate();
+		final HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
 		}
 	}
 

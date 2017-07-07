@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>com.github.sqrlserverjava</groupId>
 			<artifactId>sqrl-server-atmosphere</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<!-- Reference JPA provider -->

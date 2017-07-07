@@ -13,8 +13,8 @@
 <script	type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.12/atmosphere.js"></script>
 	<!-- Include javascript here for readability. Real apps would move it to the server -->
 	<script>
-	// http://stackoverflow.com/a/11663507/2863942
-	// Avoid `console` errors in browsers that lack a console.
+	<%--  http://stackoverflow.com/a/11663507/2863942 --%>
+	<%--  Avoid `console` errors in browsers that lack a console. --%>
 	(function() {
 	    var method;
 	    var noop = function () {};
@@ -30,12 +30,25 @@
 	    while (length--) {
 	        method = methods[length];
 	
-	        // Only stub undefined methods.
+	        <%-- Only stub undefined methods. --%>
 	        if (!console[method]) {
 	            console[method] = noop;
 	        }
 	    }
 	}());
+	
+	var localhostRoot = 'http://localhost:25519/';	<%-- the SQRL client listener  --%>
+	var cpsGifProbe = new Image(); 					<%-- create an instance of a memory-based probe image --%>
+	
+	<%-- Taken from https://www.grc.com/sqrl/demo/pagesync.js and renamed --%>
+	cpsGifProbe.onload = function() {  <%-- if the SQRL localhost listener is present --%>
+		document.location.href = localhostRoot + "<%=(String) request.getAttribute("sqrlurlwithcan64")%>";
+	};
+
+	<%-- Taken from https://www.grc.com/sqrl/demo/pagesync.js and renamed --%>
+	cpsGifProbe.onerror = function() {
+		setTimeout( function(){ cpsGifProbe.src = localhostRoot + Date.now() + '.gif';	}, 200 );
+	}
 	
 	function sqrlInProgress() {
 		var sqrlImgSrc = $("#sqrlImg").attr("src");
@@ -44,7 +57,6 @@
     		return;
     	}
 		$("#cancel").hide();
-   		window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
     	$("#uplogin").hide();
     	$("#or").hide();
         $("#sqrlImg").attr("src", "spinner.gif");
@@ -53,6 +65,8 @@
     	if(subtitle.innerText.indexOf("error") >=0 ) {
     		subtitle.innerText = "";
     	}
+    	cpsGifProbe.onerror();	<%-- try to connect to the SQRL client on localhost if possible (CPS) --%>
+   		window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
 	}
 	
 	function stopPolling(socket, subsocket, request) {
@@ -62,7 +76,7 @@
 	
     $(document).ready(function() {
     $("#cancel").hide();
-	// Atmosphere stuff for auto refresh
+	<%-- Atmosphere stuff for auto refresh --%>
 	var socket = atmosphere;
 	var subsocket;
 	var atmosphereurl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/")) +"/sqrlauthpolling";
@@ -89,13 +103,17 @@
         	var status = response.responseBody;
 			console.error("received from server: " + status);
 			if (status.indexOf("ERROR_") > -1) {
+				subsocket.close();
 				window.location.replace("login?error="+status);
+			} else if (status.indexOf("CPS") > -1) {
+				<%-- Stop polling and wait for the SQRL client to provide the URL	--%>	
+				subsocket.close();
 			} else if(status == "AUTH_COMPLETE") {
 				subsocket.push(atmosphere.util.stringifyJSON({ state: "AUTH_COMPLETE" }));
 				subsocket.close();
-            	window.location.replace("sqrllogin");
+				window.location.replace("sqrllogin");
 			} else if(status == "COMMUNICATING"){
-				// The user scanned the QR code and sqrl auth is in progress
+				<%-- The user scanned the QR code and sqrl auth is in progress --%>
 				instruction.innerText = "Communicating with SQRL client";
 				subsocket.push(atmosphere.util.stringifyJSON({ state: "COMMUNICATING" }));
 				sqrlInProgress();

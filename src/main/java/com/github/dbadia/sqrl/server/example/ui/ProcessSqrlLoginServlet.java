@@ -1,10 +1,7 @@
 package com.github.dbadia.sqrl.server.example.ui;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.sql.SQLException;
-import java.util.Base64;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,13 +13,11 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dbadia.sqrl.server.SqrlAuthPageData;
 import com.github.dbadia.sqrl.server.SqrlConfig;
 import com.github.dbadia.sqrl.server.SqrlServerOperations;
 import com.github.dbadia.sqrl.server.enums.SqrlAuthenticationStatus;
 import com.github.dbadia.sqrl.server.example.Constants;
 import com.github.dbadia.sqrl.server.example.ErrorId;
-import com.github.dbadia.sqrl.server.example.Util;
 import com.github.dbadia.sqrl.server.example.data.AppDatastore;
 import com.github.dbadia.sqrl.server.example.data.AppUser;
 import com.github.dbadia.sqrl.server.exception.SqrlException;
@@ -63,10 +58,15 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		logger.info(SqrlUtil.logEnterServlet(request));
 		try {
+			// TODO: all requests that get here must contain a correlator, right? requestContainsCorrelatorCookie
+
+			// Web polling SQRL auth (non-CPS)
 			final boolean requestContainsCorrelatorCookie = sqrlServerOperations
 					.extractSqrlCorrelatorStringFromRequestCookie(request) != null;
-			if (requestContainsCorrelatorCookie && checkForSqrlAuthComplete(request, response)) {
+			if (requestContainsCorrelatorCookie && isSqrlWebRefreshAuthComplete(request, response)) {
 				// Nothing else to do, just fall through and return
+				// TODO: why fall through if we are using long polling now? Just throw error do same below for
+				// return false
 			} else {
 				RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
 			}
@@ -76,9 +76,8 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 		}
 	}
 
-	private boolean checkForSqrlAuthComplete(final HttpServletRequest request, final HttpServletResponse response)
+	private boolean isSqrlWebRefreshAuthComplete(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException, SQLException, SqrlException {
-		// Check for SQRL auth complete
 		final SqrlCorrelator sqrlCorrelator = sqrlServerOperations.fetchSqrlCorrelator(request);
 		sqrlServerOperations.cleanSqrlAuthData(request, response);
 		if (sqrlCorrelator == null) {
@@ -86,81 +85,53 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 		}
 		final SqrlAuthenticationStatus authStatus = sqrlCorrelator.getAuthenticationStatus();
 		if (authStatus.isUpdatesForThisCorrelatorComplete()) {
-			// Now that we have fetched the non-happy status, we can delete the correlator
-			// If we didn't it would still get cleaned up later
+			// Now that we are done using the correlator, we can delete the correlator
+			// note that If we didn't it would still get cleaned up later
 			sqrlServerOperations.deleteSqrlCorrelator(sqrlCorrelator);
 		}
 		if (!authStatus.isHappyPath()) {
-			showLoginPage(request, response, "<font color='red'>SQRL protocol error: " + authStatus + "</font>");
+			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
 			return true;
-		} else if (SqrlAuthenticationStatus.AUTH_COMPLETE == authStatus) {
-			final SqrlIdentity sqrlIdentity = sqrlCorrelator.getAuthenticatedIdentity();
-			if (sqrlIdentity == null) {
-				logger.warn("Correaltor status return AUTH_COMPLETE but user isn't authenticated");
-				return false;
-			}
-			final HttpSession session = request.getSession(true);
-			session.setAttribute(Constants.SESSION_SQRL_IDENTITY, sqrlIdentity);
-			// The user has been SQRL authenticated, is this an existing app user?
-			final String nativeUserXref = sqrlIdentity.getNativeUserXref();
-			AppUser nativeAppUser = null;
-			if (nativeUserXref != null) {
-				nativeAppUser = AppDatastore.getInstance().fetchUserById(Long.parseLong(nativeUserXref));
-			}
-			final boolean existingAppUser = nativeAppUser != null;
-			if (existingAppUser) {
-				session.setAttribute(Constants.SESSION_NATIVE_APP_USER, nativeAppUser);
-				sendUserToAppPage(response);
-				return true;
-			} else {
-				// sqrlIdentity exists but NativeAppUser doesn't. Send them to enrollment page to see if they have a
-				// user name and password or are completely new
-				request.setAttribute(Constants.JSP_SUBTITLE, "Link SQRL to existing username?");
-				request.getRequestDispatcher("WEB-INF/linkaccountoption.jsp").forward(request, response);
-				return true;
-			}
+		} else if (authStatus.isAuthComplete()) {
+			return completeSqrlAuthentication(sqrlCorrelator, request, response);
 		}
 		return false;
 	}
+
+	private boolean completeSqrlAuthentication(final SqrlCorrelator sqrlCorrelator, final HttpServletRequest request,
+			final HttpServletResponse response) throws SqrlException, ServletException, IOException {
+		sqrlServerOperations.valiateCpsParamIfNecessary(sqrlCorrelator, request);
+		final SqrlIdentity sqrlIdentity = sqrlCorrelator.getAuthenticatedIdentity();
+		if (sqrlIdentity == null) {
+			logger.warn("Correlator status return AUTH_COMPLETE but user isn't authenticated");
+			return false;
+		}
+		final HttpSession session = request.getSession(true); // TODO: shoult thsi be true?
+		session.setAttribute(Constants.SESSION_SQRL_IDENTITY, sqrlIdentity);
+		// The user has been SQRL authenticated, is this an existing app user?
+		final String nativeUserXref = sqrlIdentity.getNativeUserXref();
+		AppUser nativeAppUser = null;
+		if (nativeUserXref != null) {
+			nativeAppUser = AppDatastore.getInstance().fetchUserById(Long.parseLong(nativeUserXref));
+		}
+		final boolean existingAppUser = nativeAppUser != null;
+		if (existingAppUser) {
+			session.setAttribute(Constants.SESSION_NATIVE_APP_USER, nativeAppUser);
+			sendUserToAppPage(response);
+			return true;
+		} else {
+			// sqrlIdentity exists but NativeAppUser doesn't. Send them to enrollment page to see if they have a
+			// user name and password or are completely new
+			request.setAttribute(Constants.JSP_SUBTITLE, "Link SQRL to existing username?");
+			request.getRequestDispatcher("WEB-INF/linkaccountoption.jsp").forward(request, response);
+			return true;
+		}
+	}
+
 
 	private void sendUserToAppPage(final HttpServletResponse response) {
 		response.setHeader("Location", "app");
 		response.setStatus(302);
 	}
 
-	void showLoginPage(final HttpServletRequest request, final HttpServletResponse response)
-			throws ServletException, IOException, SqrlException {
-		showLoginPage(request, response, null);
-	}
-
-	void showLoginPage(final HttpServletRequest request, final HttpServletResponse response, final String subtitle)
-			throws ServletException, IOException {
-		if (Util.isBlank(subtitle)) {
-			request.setAttribute(Constants.JSP_SUBTITLE, "Login Page");
-		} else {
-			request.setAttribute(Constants.JSP_SUBTITLE, subtitle);
-		}
-		// Default action, show the login page with a new SQRL QR code
-		try {
-			final SqrlAuthPageData pageData = sqrlServerOperations.prepareSqrlAuthPageData(request, response,
-					InetAddress.getByName(request.getRemoteAddr()), 250);
-			final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
-			baos.flush();
-			final byte[] imageInByteArray = baos.toByteArray();
-			baos.close();
-			// Since this is being passed to the browser, we use regular Base64 encoding, NOT SQRL specific
-			// Base64URL encoding
-			final String b64 = new StringBuilder("data:image/").append(pageData.getHtmlFileType(sqrlConfig))
-					.append(";base64, ").append(Base64.getEncoder().encodeToString(imageInByteArray)).toString();
-			request.setAttribute("sqrlqr64", b64);
-			request.setAttribute("sqrlurl", pageData.getUrl().toString());
-			request.setAttribute("sqrlqrdesc", "Click or scan to login with SQRL");
-			request.setAttribute("correlator", pageData.getCorrelator());
-			logger.debug("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
-					pageData.getUrl().toString());
-			request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
-		} catch (final SqrlException e) {
-			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
-		}
-	}
 }
