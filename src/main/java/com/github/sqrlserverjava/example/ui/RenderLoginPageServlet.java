@@ -1,4 +1,4 @@
-package com.github.dbadia.sqrl.server.example.ui;
+package com.github.sqrlserverjava.example.ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,15 +15,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dbadia.sqrl.server.SqrlAuthPageData;
-import com.github.dbadia.sqrl.server.SqrlConfig;
-import com.github.dbadia.sqrl.server.SqrlServerOperations;
-import com.github.dbadia.sqrl.server.example.Constants;
-import com.github.dbadia.sqrl.server.example.ErrorId;
-import com.github.dbadia.sqrl.server.example.Util;
-import com.github.dbadia.sqrl.server.exception.SqrlException;
-import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
-import com.github.dbadia.sqrl.server.util.SqrlUtil;
+import com.github.sqrlserverjava.SqrlAuthPageData;
+import com.github.sqrlserverjava.SqrlConfig;
+import com.github.sqrlserverjava.SqrlServerOperations;
+import com.github.sqrlserverjava.example.Constants;
+import com.github.sqrlserverjava.example.ErrorId;
+import com.github.sqrlserverjava.example.Util;
+import com.github.sqrlserverjava.exception.SqrlException;
+import com.github.sqrlserverjava.util.SqrlConfigHelper;
+import com.github.sqrlserverjava.util.SqrlUtil;
 
 /**
  * Servlet renders the login page by perparing data then forwarding to login.jsp

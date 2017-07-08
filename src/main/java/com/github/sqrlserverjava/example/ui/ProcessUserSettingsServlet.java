@@ -1,4 +1,4 @@
-package com.github.dbadia.sqrl.server.example.ui;
+package com.github.sqrlserverjava.example.ui;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,15 +13,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dbadia.sqrl.server.SqrlServerOperations;
-import com.github.dbadia.sqrl.server.example.Constants;
-import com.github.dbadia.sqrl.server.example.ErrorId;
-import com.github.dbadia.sqrl.server.example.Util;
-import com.github.dbadia.sqrl.server.example.data.AppDatastore;
-import com.github.dbadia.sqrl.server.example.data.AppUser;
-import com.github.dbadia.sqrl.server.persistence.SqrlIdentity;
-import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
-import com.github.dbadia.sqrl.server.util.SqrlUtil;
+import com.github.sqrlserverjava.SqrlServerOperations;
+import com.github.sqrlserverjava.example.Constants;
+import com.github.sqrlserverjava.example.ErrorId;
+import com.github.sqrlserverjava.example.Util;
+import com.github.sqrlserverjava.example.data.AppDatastore;
+import com.github.sqrlserverjava.example.data.AppUser;
+import com.github.sqrlserverjava.persistence.SqrlIdentity;
+import com.github.sqrlserverjava.util.SqrlConfigHelper;
+import com.github.sqrlserverjava.util.SqrlUtil;
 
 @WebServlet(urlPatterns = { "/usersettings" })
 public class ProcessUserSettingsServlet extends HttpServlet {

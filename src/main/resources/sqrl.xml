@@ -3,5 +3,5 @@
     <backchannelServletPath>https://localhost.com:8082/sqrlexample/sqrlbc</backchannelServletPath>
     <!-- Be sure to change this key! -->
     <aesKeyBytes>DhMncY4ErDcLRfwfyeN02Q==</aesKeyBytes>
-    <clientAuthStateUpdaterClass>com.github.dbadia.sqrl.atmosphere.AtmosphereClientAuthStateUpdater</clientAuthStateUpdaterClass>
+    <clientAuthStateUpdaterClass>com.github.sqrlserverjava.atmosphere.AtmosphereClientAuthStateUpdater</clientAuthStateUpdaterClass>
 </sqrlConfig>

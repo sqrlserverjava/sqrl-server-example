@@ -1,4 +1,4 @@
-package com.github.dbadia.sqrl.server.example.sqrl;
+package com.github.sqrlserverjava.example.sqrl;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.dbadia.sqrl.server.SqrlConfig;
-import com.github.dbadia.sqrl.server.SqrlServerOperations;
-import com.github.dbadia.sqrl.server.exception.SqrlException;
-import com.github.dbadia.sqrl.server.util.SqrlConfigHelper;
-import com.github.dbadia.sqrl.server.util.SqrlUtil;
+import com.github.sqrlserverjava.SqrlConfig;
+import com.github.sqrlserverjava.SqrlServerOperations;
+import com.github.sqrlserverjava.exception.SqrlException;
+import com.github.sqrlserverjava.util.SqrlConfigHelper;
+import com.github.sqrlserverjava.util.SqrlUtil;
 
 /**
  * The backchannel servlet will handle SQRL client calls only. No user side html is served from here.

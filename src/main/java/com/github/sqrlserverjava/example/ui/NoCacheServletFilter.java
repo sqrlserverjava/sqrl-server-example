@@ -1,4 +1,4 @@
-package com.github.dbadia.sqrl.server.example.ui;
+package com.github.sqrlserverjava.example.ui;
 
 import java.io.IOException;
 

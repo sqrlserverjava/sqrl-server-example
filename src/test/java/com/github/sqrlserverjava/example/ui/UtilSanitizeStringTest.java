@@ -1,4 +1,4 @@
-package com.github.dbadia.sqrl.server.example.ui;
+package com.github.sqrlserverjava.example.ui;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +11,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.github.dbadia.sqrl.server.example.Util;
+import com.github.sqrlserverjava.example.Util;
 
 @RunWith(value = Parameterized.class)
 public class UtilSanitizeStringTest {

@@ -1,9 +1,9 @@
-package com.github.dbadia.sqrl.server.example.ui;
+package com.github.sqrlserverjava.example.ui;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-import com.github.dbadia.sqrl.server.SqrlConfig;
+import com.github.sqrlserverjava.SqrlConfig;
 
 public class TCUtil {
 	/**

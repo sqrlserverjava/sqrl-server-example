@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ page session="false" %>
-<%@page import="com.github.dbadia.sqrl.server.example.Constants"%>
+<%@page import="com.github.sqrlserverjava.example.Constants"%>
 <html lang="en">
 <head>
 <title>SQRL Java Server Demo</title>

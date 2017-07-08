@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <%@ page session="false"%>
-<%@page import="com.github.dbadia.sqrl.server.example.Constants"%>
+<%@page import="com.github.sqrlserverjava.example.Constants"%>
 <html lang="en">
 <head>
 <title>SQRL Java Server Demo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="refresh" content="<%=request.getAttribute(com.github.dbadia.sqrl.server.example.Constants.JSP_PAGE_REFRESH_SECONDS)%>">
+<meta http-equiv="refresh" content="<%=request.getAttribute(com.github.sqrlserverjava.example.Constants.JSP_PAGE_REFRESH_SECONDS)%>">
 <link rel="stylesheet"	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
 <!--[if lt IE 9]><script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><![endif]-->
 <!--[if IE 9]><!--><script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><!--<![endif]-->
@@ -141,7 +141,7 @@
 	<div class="container">
 		<div class="jumbotron">
 			<h1>SQRL Java Server Demo</h1>
-			<p id="subtitle"><%=request.getAttribute(com.github.dbadia.sqrl.server.example.Constants.JSP_SUBTITLE)%></p>
+			<p id="subtitle"><%=request.getAttribute(com.github.sqrlserverjava.example.Constants.JSP_SUBTITLE)%></p>
 		</div>
 		<div class="row">
 			<div class="col-sm-4">

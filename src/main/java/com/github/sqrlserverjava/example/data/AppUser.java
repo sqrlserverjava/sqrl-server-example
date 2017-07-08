@@ -1,4 +1,4 @@
-package com.github.dbadia.sqrl.server.example.data;
+package com.github.sqrlserverjava.example.data;
 
 import java.util.Date;
 

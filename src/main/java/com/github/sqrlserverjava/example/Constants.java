@@ -1,4 +1,4 @@
-package com.github.dbadia.sqrl.server.example;
+package com.github.sqrlserverjava.example;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

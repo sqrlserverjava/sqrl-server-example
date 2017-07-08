@@ -1,4 +1,4 @@
-package com.github.dbadia.sqrl.server.example.ui;
+package com.github.sqrlserverjava.example.ui;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.github.dbadia.sqrl.server.example.ErrorId;
+import com.github.sqrlserverjava.example.ErrorId;
 
 @WebServlet(urlPatterns = { "/error" })
 public class RenderErrorPageServlet extends HttpServlet {

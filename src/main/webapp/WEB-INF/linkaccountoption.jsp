@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ page session="false" %>
-<%@page import="com.github.dbadia.sqrl.server.example.Constants"%>
+<%@page import="com.github.sqrlserverjava.example.Constants"%>
 <html lang="en">
 <head>
 <title>SQRL Java Server Demo</title>
@@ -14,7 +14,7 @@
 	<div class="container">
 		<div class="jumbotron">
 			<h1>SQRL Java Server Demo</h1>
-			<p><%=request.getAttribute(com.github.dbadia.sqrl.server.example.Constants.JSP_SUBTITLE)%></p>
+			<p><%=request.getAttribute(com.github.sqrlserverjava.example.Constants.JSP_SUBTITLE)%></p>
 		</div>
 		<div class="row">
 			<div class="col-sm-6">

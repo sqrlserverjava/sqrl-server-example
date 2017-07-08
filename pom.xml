@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>com.github.sqrlserverjava</groupId>
 			<artifactId>sqrl-server-base</artifactId>
-			<version>0.9.3-SNAPSHOT</version>
+			<version>0.9.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.sqrlserverjava</groupId>
