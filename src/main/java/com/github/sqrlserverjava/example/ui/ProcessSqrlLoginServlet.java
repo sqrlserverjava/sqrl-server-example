@@ -42,10 +42,9 @@ import com.github.sqrlserverjava.util.SqrlUtil;
 public class ProcessSqrlLoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 5609899766821704630L;
 
-	private static final Logger			logger					= LoggerFactory
-			.getLogger(ProcessSqrlLoginServlet.class);
-	private final SqrlConfig			sqrlConfig				= SqrlConfigHelper.loadFromClasspath();
-	private final SqrlServerOperations	sqrlServerOperations	= new SqrlServerOperations(sqrlConfig);
+	private static final Logger logger = LoggerFactory.getLogger(ProcessSqrlLoginServlet.class);
+	private final SqrlConfig sqrlConfig = SqrlConfigHelper.loadFromClasspath();
+	private final SqrlServerOperations sqrlServerOperations = new SqrlServerOperations(sqrlConfig);
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
@@ -100,7 +99,7 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 
 	private boolean completeSqrlAuthentication(final SqrlCorrelator sqrlCorrelator, final HttpServletRequest request,
 			final HttpServletResponse response) throws SqrlException, ServletException, IOException {
-		sqrlServerOperations.valiateCpsParamIfNecessary(sqrlCorrelator, request);
+		sqrlServerOperations.browserFacingOperations().valdateCpsParamIfNecessary(sqrlCorrelator, request);
 		final SqrlIdentity sqrlIdentity = sqrlCorrelator.getAuthenticatedIdentity();
 		if (sqrlIdentity == null) {
 			logger.warn("Correlator status return AUTH_COMPLETE but user isn't authenticated");
