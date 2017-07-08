@@ -65,7 +65,9 @@
     	if(subtitle.innerText.indexOf("error") >=0 ) {
     		subtitle.innerText = "";
     	}
-    	cpsGifProbe.onerror();	<%-- try to connect to the SQRL client on localhost if possible (CPS) --%>
+    	if(<%=(String) request.getAttribute("cpsEnabled")%>) {
+    		cpsGifProbe.onerror();	<%-- try to connect to the SQRL client on localhost if possible (CPS) --%>
+    	}
    		window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
 	}
 	
@@ -101,15 +103,15 @@
 
         request.onMessage = function (response) {
         	var status = response.responseBody;
-			console.error("received from server: " + status);
+			console.info("received from server: " + status);
 			if (status.indexOf("ERROR_") > -1) {
 				subsocket.close();
 				window.location.replace("login?error="+status);
-			} else if (status.indexOf("CPS") > -1) {
+			} else if (status.indexOf("AUTHENTICATED_CPS") > -1) {
 				<%-- Stop polling and wait for the SQRL client to provide the URL	--%>	
 				subsocket.close();
-			} else if(status == "AUTH_COMPLETE") {
-				subsocket.push(atmosphere.util.stringifyJSON({ state: "AUTH_COMPLETE" }));
+			} else if(status == "AUTHENTICATED_BROWSER") {
+				subsocket.push(atmosphere.util.stringifyJSON({ state: "AUTHENTICATED_BROWSER" }));
 				subsocket.close();
 				window.location.replace("sqrllogin");
 			} else if(status == "COMMUNICATING"){
@@ -119,6 +121,8 @@
 				sqrlInProgress();
 			} else {
 				console.error("received unknown state from server: " + status);
+				subsocket.close();
+				window.location.replace("login?error=ERROR_SQRL_INTERNAL");
 			}
         };
 

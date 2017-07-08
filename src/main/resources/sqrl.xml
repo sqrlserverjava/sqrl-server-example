@@ -4,4 +4,5 @@
     <!-- Be sure to change this key! -->
     <aesKeyBytes>DhMncY4ErDcLRfwfyeN02Q==</aesKeyBytes>
     <clientAuthStateUpdaterClass>com.github.sqrlserverjava.atmosphere.AtmosphereClientAuthStateUpdater</clientAuthStateUpdaterClass>
+    <enableCps>false</enableCps>
 </sqrlConfig>

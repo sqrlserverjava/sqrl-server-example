@@ -79,6 +79,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 			request.setAttribute("sqrlqr64", b64);
 			final String sqrlUrl = pageData.getUrl().toString();
 			request.setAttribute("sqrlurl", sqrlUrl);
+			request.setAttribute("cpsEnabled", Boolean.toString(sqrlConfig.isEnableCps()));
 			// The url that will get sent to the SQRL client via CPS must include a cancel page (can) if case of failure
 			// TODO: add optional? can page
 			final String sqrlurlWithCan = sqrlUrl;
