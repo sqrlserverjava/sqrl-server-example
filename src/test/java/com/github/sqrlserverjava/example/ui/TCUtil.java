@@ -2,10 +2,13 @@ package com.github.sqrlserverjava.example.ui;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Base64;
 
 import com.github.sqrlserverjava.SqrlConfig;
 
 public class TCUtil {
+	static final String AES_TEST_KEY = Base64.getEncoder().encodeToString(new byte[16]);
+	
 	/**
 	 * @deprecated this is for test case use only, it has a hardcoded key and infinite timeout which are BAD practices
 	 */
@@ -14,7 +17,7 @@ public class TCUtil {
 		final SqrlConfig sqrlConfig = new SqrlConfig();
 		sqrlConfig.setServerFriendlyName("SQRL JUNIT test");
 		sqrlConfig.setBackchannelServletPath("sqrlbc");
-		sqrlConfig.setAESKeyBytes(new byte[16]);
+		sqrlConfig.setAesKeyBase64(AES_TEST_KEY);
 		sqrlConfig.setNutValidityInSeconds(Integer.MAX_VALUE);
 		sqrlConfig.setSecureRandom(new TestSecureRandom());
 
