@@ -4,9 +4,9 @@
 	<persistence-unit name="javasqrl-persistence"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>com.github.dbadia.sqrl.server.persistence.SqrlIdentity</class>
-		<class>com.github.dbadia.sqrl.server.persistence.SqrlCorrelator</class>
-		<class>com.github.dbadia.sqrl.server.persistence.SqrlUsedNutToken</class>
+        <class>com.github.sqrlserverjava.persistence.SqrlIdentity</class>
+        <class>com.github.sqrlserverjava.persistence.SqrlCorrelator</class>
+        <class>com.github.sqrlserverjava.persistence.SqrlUsedNutToken</class>
 		<properties>
 			<property name="eclipselink.logging.level" value="CONFIG" />
 			<property name="eclipselink.target-database" value="DERBY" />
