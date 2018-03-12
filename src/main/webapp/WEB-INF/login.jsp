@@ -51,15 +51,16 @@
 	}
 	
 	function sqrlInProgress() {
-		var sqrlImgSrc = $("#sqrlImg").attr("src");
-		var showingSqrlQr = sqrlImgSrc != "spinner.gif";
+		var sqrlButtonSrc = $("#sqrlButton").attr("src");
+		var showingSqrlQr = sqrlButtonSrc != "spinner.gif";
     	if(!showingSqrlQr) {
     		return;
     	}
-		$("#cancel").hide();
+    	$("#sqrlButton").attr("src", "spinner.gif");
+    	$("#cancel").hide();
     	$("#uplogin").hide();
     	$("#or").hide();
-        $("#sqrlImg").attr("src", "spinner.gif");
+    	$("#sqrlImg").hide();
         instruction.innerText = "Waiting for SQRL client";
 		$("#cancel").show();
     	if(subtitle.innerText.indexOf("error") >=0 ) {
@@ -147,37 +148,46 @@
 			<h1>SQRL Java Server Demo</h1>
 			<p id="subtitle"><%=request.getAttribute(com.github.sqrlserverjava.example.Constants.JSP_SUBTITLE)%></p>
 		</div>
-		<div class="row">
-			<div class="col-sm-4">
-				<h4 id="instruction"><%=(String) request.getAttribute("sqrlqrdesc")%></h4>
-				<p>
-					<img id="sqrlImg" onclick="sqrlInProgress()"
-						src="<%=(String) request.getAttribute("sqrlqr64")%>"
-						alt="<%=(String) request.getAttribute("sqrlqrdesc")%>" />
-				</p>
+		<div>
+		  <div class="row vcenter">
+			<h4 id="instruction"> </h4>
+			<div class="col-sm-3 vcenter" >
+				<!--  <img id="sqrlButton" onclick="sqrlInProgress()" src="signInSqrl.png" /> -->  
+				<a href="<%=(String) request.getAttribute("sqrlurl")%>"  onclick="sqrlInProgress();return false;" >
+					<img id="sqrlButton" src="signInSqrl.png" alt="Click to sign in with SQRL" /></a>
+				<br/>
 				<a id="cancel"  href="logout">Cancel SQRL authentication</a>
+				<br/>
 			</div>
-			<div id="or" class="col-sm-4 ">
-				<br />
-				<h3 class="text-center">OR</h3>
+			<div class="col-sm-4 vcenter" >
+-               <img id="sqrlImg"
+-                     src="<%=(String) request.getAttribute("sqrlqr64")%>"
+-                     alt="<%=(String) request.getAttribute("sqrlqrdesc")%>" />
 			</div>
-			<div id="uplogin" class="col-sm-4">
-				<h3>Username / password login</h3>
+		  </div>
+		  <div id="or" >
+		  		<p/>
+				<h4 >OR</h4>
+		  </div>
+		  <div id="uplogin" >
+			  <div>
 				<p>
-					Username: (alphanumeric)<br />
-				<form action="auth" method="post">
-					<input type="text" name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required>
+					Username: (alphanumeric)<br>
+				</p><form action="auth" method="post">  <!-- TODO; what is this background-image -->
+					<!--  <input name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" autocomplete="off" type="text">-->
+					<input name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required="" autocomplete="off" type="text">
 					<br> Password:<br> 
-					<input type="password" name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required>
+					<input name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required=""  autocomplete="off" type="password">
 					<br> 
-					<input type="hidden" name="type" value="up"><br> <input type="submit" value="Submit">
+					<input name="type" value="up" type="hidden"><br> <input value="Submit" type="submit">
 				</form>
-				<br /> <br />
+				<br> <br>
 				<p>
-					Note: password is "sqrl" for all users.<br />
-				<p>You can create a new user with either authentication method</p>
-				<br />
-			</div>
+					Note: password is "sqrl" for all users.<br>
+				</p><p>You can create a new user with either authentication method</p>
+				<br>
+		    </div>				
+		  </div>
 		</div>
 	</div>
 </body>

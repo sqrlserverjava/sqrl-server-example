@@ -65,7 +65,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 		try {
 			final SqrlAuthPageData pageData = sqrlServerOperations.browserFacingOperations()
 					.prepareSqrlAuthPageData(request, response,
-							InetAddress.getByName(request.getRemoteAddr()), 250);
+							InetAddress.getByName(request.getRemoteAddr()), 100);
 			final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
 			baos.flush();
 			final byte[] imageInByteArray = baos.toByteArray();
