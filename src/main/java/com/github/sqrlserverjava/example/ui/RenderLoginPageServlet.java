@@ -85,7 +85,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 			// TODO: add optional? can page
 			final String sqrlurlWithCan = sqrlUrl;
 			request.setAttribute("sqrlurlwithcan64", SqrlUtil.sqrlBase64UrlEncode(sqrlurlWithCan));
-			request.setAttribute("sqrlqrdesc", "Click or scan to login with SQRL");
+			request.setAttribute("sqrlqrdesc", "Mobile SQRL - scan QR code with SQRL app");
 			request.setAttribute("correlator", pageData.getCorrelator());
 			logger.info("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
 					pageData.getUrl().toString());

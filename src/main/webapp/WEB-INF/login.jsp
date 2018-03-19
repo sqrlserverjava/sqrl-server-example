@@ -59,7 +59,9 @@
     	$("#sqrlButton").attr("src", "spinner.gif");
     	$("#cancel").hide();
     	$("#uplogin").hide();
-    	$("#or").hide();
+    	$("#sqrlQrRow").hide();
+    	$("#or1").hide();
+    	$("#or2").hide();
     	$("#sqrlImg").hide();
         instruction.innerText = "Waiting for SQRL client";
 		$("#cancel").show();
@@ -149,9 +151,9 @@
 			<p id="subtitle"><%=request.getAttribute(com.github.sqrlserverjava.example.Constants.JSP_SUBTITLE)%></p>
 		</div>
 		<div>
-		  <div class="row vcenter">
+		  <div class="row">
 			<h4 id="instruction"> </h4>
-			<div class="col-sm-3 vcenter" >
+			<div class="col-sm-3" >
 				<!--  <img id="sqrlButton" onclick="sqrlInProgress()" src="signInSqrl.png" /> -->  
 				<a href="<%=(String) request.getAttribute("sqrlurl")%>"  onclick="sqrlInProgress();return false;" >
 					<img id="sqrlButton" src="signInSqrl.png" alt="Click to sign in with SQRL" /></a>
@@ -159,15 +161,11 @@
 				<a id="cancel"  href="logout">Cancel SQRL authentication</a>
 				<br/>
 			</div>
-			<div class="col-sm-4 vcenter" >
--               <img id="sqrlImg"
--                     src="<%=(String) request.getAttribute("sqrlqr64")%>"
--                     alt="<%=(String) request.getAttribute("sqrlqrdesc")%>" />
-			</div>
 		  </div>
-		  <div id="or" >
+		  <div id="or1">
 		  		<p/>
-				<h4 >OR</h4>
+		  		<h5><i> -- or --</i></h5>
+		  		<p/>
 		  </div>
 		  <div id="uplogin" >
 			  <div>
@@ -186,8 +184,23 @@
 					Note: password is "sqrl" for all users.<br>
 				</p><p>You can create a new user with either authentication method</p>
 				<br>
-		    </div>				
+		    </div>
 		  </div>
+		  <div id="or2" >
+		  		<p/>
+		  		<h5><i> -- or --</i></h5>
+		  </div>
+		  <div class="row" id="sqrlQrRow">
+		  	<div class="col-sm-2" >
+-               <img src="<%=(String) request.getAttribute("sqrlqr64")%>"
+-                     alt="<%=(String) request.getAttribute("sqrlqrdesc")%>" />
+			</div>
+			<div class="col-sm-1" >
+			<%=(String) request.getAttribute("sqrlqrdesc")%><br>
+			</div>
+			<div class="col-sm-7" >
+			<br/>
+			</div>
 		</div>
 	</div>
 </body>
