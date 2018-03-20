@@ -17,7 +17,6 @@ import com.github.sqrlserverjava.SqrlConfig;
 import com.github.sqrlserverjava.SqrlServerOperations;
 import com.github.sqrlserverjava.exception.SqrlException;
 import com.github.sqrlserverjava.util.SqrlConfigHelper;
-import com.github.sqrlserverjava.util.SqrlUtil;
 
 /**
  * The backchannel servlet will handle SQRL client calls only. No user side html is served from here.
@@ -39,9 +38,6 @@ public class SqrlBackchannelServlet extends HttpServlet {
 		try {
 			if (!initialized.get()) {
 				initialize();
-			}
-			if (logger.isInfoEnabled()) {
-				logger.info(SqrlUtil.buildLogMessageForSqrlClientRequest(request).toString());
 			}
 			sqrlClientFacingOps.handleSqrlClientRequest(request, response);
 		} catch (final SqrlException e) {

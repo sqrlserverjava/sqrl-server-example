@@ -19,8 +19,7 @@
 		<div class="row">
 			<div class="col-sm-6">
 				<p>You have been authenticated via SQRL. </p>
-				<p>If you have an existing username and password for this site that you would like to link your SQRL ID to, then enter your credentials below. <br/></p>
-				<!-- <p><a href="usersettingsrd">I don't have a username/password.  This is my first time logging in to this site</a><p/>  -->				
+				<p>If you have an existing username and password for this site that you would like to link your SQRL ID to, then enter your credentials. <br/></p>
 			</div>
 			<div class="col-sm-6">
 				<p>Username: (alphanumeric)<br/>
