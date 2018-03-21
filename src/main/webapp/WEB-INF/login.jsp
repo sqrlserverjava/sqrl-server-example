@@ -199,6 +199,15 @@
 			<%=(String) request.getAttribute("sqrlqrdesc")%><br>
 			</div>
 			<div class="col-sm-7" >
+			 <%-- Give some space so users can scroll past the QR code so it's easy to scan --%>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
 			<br/>
 			</div>
 		</div>

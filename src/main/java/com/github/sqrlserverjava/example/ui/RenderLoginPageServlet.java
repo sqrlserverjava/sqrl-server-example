@@ -2,7 +2,6 @@ package com.github.sqrlserverjava.example.ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.Base64;
 
 import javax.servlet.ServletException;
@@ -65,8 +64,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 		// Default action, show the login page with a new SQRL QR code
 		try {
 			final SqrlAuthPageData pageData = sqrlServerOperations.browserFacingOperations()
-					.prepareSqrlAuthPageData(request, response,
-							InetAddress.getByName(request.getRemoteAddr()), 100);
+					.prepareSqrlAuthPageData(request, response, 100);
 			final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
 			baos.flush();
 			final byte[] imageInByteArray = baos.toByteArray();
