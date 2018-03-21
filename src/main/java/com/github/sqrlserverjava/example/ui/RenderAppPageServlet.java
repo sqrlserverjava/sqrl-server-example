@@ -61,7 +61,7 @@ public class RenderAppPageServlet extends HttpServlet {
 			session.setAttribute("phrase", user.getWelcomePhrase());
 			session.setAttribute("accounttype", accountType);
 			request.getRequestDispatcher("WEB-INF/app.jsp").forward(request, response);
-		} catch (final Exception e) {
+		} catch (final RuntimeException e) {
 			logger.error("Error rendering app page", e);
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}

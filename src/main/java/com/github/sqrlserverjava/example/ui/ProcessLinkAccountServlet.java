@@ -59,7 +59,7 @@ public class ProcessLinkAccountServlet extends HttpServlet {
 				// a real app might do a server side redirect instead
 				return;
 			}
-		} catch (final Exception e) {
+		} catch (final RuntimeException | SQLException e) {
 			logger.error("Error in LinkAccountServlet", e);
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}

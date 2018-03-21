@@ -51,7 +51,7 @@ public class ProcessLogoutServlet extends HttpServlet {
 			Util.deleteAllCookies(request, response);
 			response.setStatus(302);
 			response.setHeader("Location", "login");
-		} catch (final Exception e) {
+		} catch (final RuntimeException e) {
 			logger.error("Error in LinkAccountServlet", e);
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}

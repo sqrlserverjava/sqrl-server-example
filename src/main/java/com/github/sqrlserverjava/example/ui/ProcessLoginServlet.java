@@ -52,8 +52,8 @@ public class ProcessLoginServlet extends HttpServlet {
 
 		try {
 			handleUsernamePasswordAuthentication(request, response);
-		} catch (final Exception e) {
-			logger.error("Error rendering login page", e);
+		} catch (final RuntimeException | SqrlException | SQLException e) {
+			logger.error("Error processing login", e);
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}
 	}

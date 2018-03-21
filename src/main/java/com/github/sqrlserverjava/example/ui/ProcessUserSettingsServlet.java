@@ -69,7 +69,7 @@ public class ProcessUserSettingsServlet extends HttpServlet {
 				}
 				enrollUsernameOnlyUserOrModify(appUser, givenName, welcomePhrase);
 			}
-		} catch (final Exception e) {
+		} catch (final RuntimeException | SQLException e) {
 			logger.error("Error processing user settings", e);
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}

@@ -45,8 +45,9 @@ public class RenderLoginPageServlet extends HttpServlet {
 		logger.info(SqrlUtil.logEnterServlet(request));
 		try {
 			displayLoginPage(request, response);
-		} catch (final Exception e) {
-			throw new ServletException("Error rendering login page", e);
+		} catch (final RuntimeException e) {
+			logger.error("Error rendering login page", e);
+			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}
 	}
 
