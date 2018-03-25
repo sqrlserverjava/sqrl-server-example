@@ -5,4 +5,5 @@
     <aesKeyBase64>DhMncY4ErDcLRfwfyeN02Q==</aesKeyBase64>
     <clientAuthStateUpdaterClass>com.github.sqrlserverjava.atmosphere.AtmosphereClientAuthStateUpdater</clientAuthStateUpdaterClass>
     <enableCps>false</enableCps>
+    <cpsCancelUri>login?error=8</cpsCancelUri>
 </sqrlConfig>

@@ -173,9 +173,9 @@
 					Username: (alphanumeric)<br>
 				</p><form action="auth" method="post">  <!-- TODO; what is this background-image -->
 					<!--  <input name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" autocomplete="off" type="text">-->
-					<input name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required="" autocomplete="off" type="text">
+					<input name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required autocomplete="off" type="text">
 					<br> Password:<br> 
-					<input name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required=""  autocomplete="off" type="password">
+					<input name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required  autocomplete="off" type="password">
 					<br> 
 					<input name="type" value="up" type="hidden"><br> <input value="Submit" type="submit">
 				</form>
@@ -192,8 +192,8 @@
 		  </div>
 		  <div class="row" id="sqrlQrRow">
 		  	<div class="col-sm-2" >
--               <img src="<%=(String) request.getAttribute("sqrlqr64")%>"
--                     alt="<%=(String) request.getAttribute("sqrlqrdesc")%>" />
+               <img src="<%=(String) request.getAttribute("sqrlqr64")%>"
+                     alt="<%=(String) request.getAttribute("sqrlqrdesc")%>" />
 			</div>
 			<div class="col-sm-1" >
 			<%=(String) request.getAttribute("sqrlqrdesc")%><br>
@@ -210,6 +210,7 @@
 			<br/>
 			<br/>
 			</div>
+		 </div>
 		</div>
 	</div>
 </body>

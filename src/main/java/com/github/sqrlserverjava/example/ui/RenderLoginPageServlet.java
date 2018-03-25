@@ -34,15 +34,16 @@ import com.github.sqrlserverjava.util.SqrlUtil;
 public class RenderLoginPageServlet extends HttpServlet {
 	private static final long serialVersionUID = -849809318695746441L;
 
-	private static final Logger			logger					= LoggerFactory.getLogger(RenderLoginPageServlet.class);
-	private final SqrlConfig			sqrlConfig				= SqrlConfigHelper.loadFromClasspath();
-	private final SqrlServerOperations	sqrlServerOperations	= new SqrlServerOperations(sqrlConfig);
+	private static final Logger		logger					= LoggerFactory.getLogger(RenderLoginPageServlet.class);
+	private SqrlConfig				sqrlConfig				= null;
+	private SqrlServerOperations	sqrlServerOperations	= null;
 
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
 		logger.info(SqrlUtil.logEnterServlet(request));
 		try {
+			checkInit();
 			displayLoginPage(request, response);
 		} catch (final RuntimeException e) {
 			logger.error("Error rendering login page", e);
@@ -102,17 +103,8 @@ public class RenderLoginPageServlet extends HttpServlet {
 		if (Util.isBlank(errorParam)) {
 			return;
 		}
-		String errorMessage = null;
-		if (errorParam.startsWith("ERROR_")) {
-			try {
-				errorMessage = ErrorId.valueOf(errorParam).getErrorMessage();
-			} catch (final IllegalArgumentException e) {
-				logger.error("Error translating errorParam '{}' to ErrorId", errorParam, e);
-				errorMessage = ErrorId.GENERIC.getErrorMessage();
-			}
-		} else {
-			errorMessage = ErrorId.byId(Integer.parseInt(errorParam)).getErrorMessage();
-		}
+		String errorMessage = ErrorId.lookup(errorParam);
+
 		final StringBuilder buf = new StringBuilder("Error").append(errorMessage).append(".");
 		// If we have access to the correlator, append the first 5 chars to the message in case it gets reported
 		final String correlatorString = sqrlServerOperations.extractSqrlCorrelatorStringFromRequestCookie(request);
@@ -132,4 +124,12 @@ public class RenderLoginPageServlet extends HttpServlet {
 		}
 	}
 
+	private void checkInit() {
+		if (sqrlConfig == null) {
+			sqrlConfig = SqrlConfigHelper.loadFromClasspath();
+		}
+		if (sqrlServerOperations == null && sqrlConfig != null) {
+			sqrlServerOperations = new SqrlServerOperations(sqrlConfig);
+		}
+	}
 }
