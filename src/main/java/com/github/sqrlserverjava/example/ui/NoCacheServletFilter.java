@@ -1,6 +1,8 @@
 package com.github.sqrlserverjava.example.ui;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -15,12 +17,25 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 @WebFilter(filterName = "NoCacheServletFilter", urlPatterns = { "/*" }, asyncSupported = true)
 public class NoCacheServletFilter implements Filter {
 	private static final Logger logger = LoggerFactory.getLogger(NoCacheServletFilter.class);
 
+	private static String		buildNumber	= "x";
+
 	@Override
 	public void init(final FilterConfig filterConfig) throws ServletException {
+		try (InputStream is = filterConfig.getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")) {
+			Properties properties = new Properties();
+			properties.load(is);
+			String tempBuild = properties.getProperty("Implementation-Build");
+			if (tempBuild != null) {
+				buildNumber = tempBuild;
+			}
+		} catch (IOException e) {
+			logger.error("Caught IOException during build number check", e);
+		}
 	}
 
 	@Override
@@ -35,6 +50,8 @@ public class NoCacheServletFilter implements Filter {
 			httpResponse.setHeader("Pragma", "no-cache"); // HTTP 1.0.
 			httpResponse.setDateHeader("Expires", 0); // Proxies.
 		}
+		// Set our build number as well
+		request.setAttribute("build", buildNumber);
 		chain.doFilter(request, response);
 	}
 

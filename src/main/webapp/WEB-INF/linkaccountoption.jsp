@@ -3,7 +3,7 @@
 <%@page import="com.github.sqrlserverjava.example.Constants"%>
 <html lang="en">
 <head>
-<title>SQRL Java Server Demo</title>
+<title>SQRL Java Server Demo - build #<%=(String) request.getAttribute("build")%></title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"

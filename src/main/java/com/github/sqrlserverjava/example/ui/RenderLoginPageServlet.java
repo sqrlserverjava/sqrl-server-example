@@ -65,7 +65,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 		// Default action, show the login page with a new SQRL QR code
 		try {
 			final SqrlAuthPageData pageData = sqrlServerOperations.browserFacingOperations()
-					.prepareSqrlAuthPageData(request, response, 100);
+					.prepareSqrlAuthPageData(request, response, 175);
 			final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
 			baos.flush();
 			final byte[] imageInByteArray = baos.toByteArray();
@@ -82,7 +82,6 @@ public class RenderLoginPageServlet extends HttpServlet {
 			request.setAttribute("sqrlurl", sqrlUrl);
 			request.setAttribute("cpsEnabled", Boolean.toString(sqrlConfig.isEnableCps()));
 			// The url that will get sent to the SQRL client via CPS must include a cancel page (can) if case of failure
-			// TODO: add optional? can page
 			final String sqrlurlWithCan = sqrlUrl;
 			request.setAttribute("sqrlurlwithcan64", SqrlUtil.sqrlBase64UrlEncode(sqrlurlWithCan));
 			request.setAttribute("sqrlqrdesc", "Mobile SQRL - scan QR code with SQRL app");
