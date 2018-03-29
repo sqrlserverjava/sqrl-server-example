@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.sqrlserverjava.util.VersionExtractor;
+import com.github.sqrlserverjava.util.VersionExtractor.Module;
 
 @WebFilter(filterName = "NoCacheServletFilter", urlPatterns = { "/*" }, asyncSupported = true)
 public class NoCacheServletFilter implements Filter {
@@ -26,6 +28,8 @@ public class NoCacheServletFilter implements Filter {
 
 	@Override
 	public void init(final FilterConfig filterConfig) throws ServletException {
+		logger.info(VersionExtractor.extractDetailedBuildInfo(Module.EXAMPLE_APP));
+		// Load our simple build number for display on the web app
 		try (InputStream is = filterConfig.getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")) {
 			Properties properties = new Properties();
 			properties.load(is);
@@ -33,8 +37,8 @@ public class NoCacheServletFilter implements Filter {
 			if (tempBuild != null) {
 				buildNumber = tempBuild;
 			}
-		} catch (IOException e) {
-			logger.error("Caught IOException during build number check", e);
+		} catch (RuntimeException | IOException e) {
+			logger.error("Caught Exception during build number check", e);
 		}
 	}
 
