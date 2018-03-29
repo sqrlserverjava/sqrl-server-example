@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sqrlConfig>
-    <backchannelServletPath>https://localhost.com:8082/sqrlexample/sqrlbc</backchannelServletPath>
-    <!-- Be sure to change this key! -->
+    <backchannelServletPath>sqrlbc</backchannelServletPath>
+    <!-- TODO: change this key for a real deployment -->
     <aesKeyBase64>DhMncY4ErDcLRfwfyeN02Q==</aesKeyBase64>
-    <clientAuthStateUpdaterClass>com.github.sqrlserverjava.atmosphere.AtmosphereClientAuthStateUpdater</clientAuthStateUpdaterClass>
     <enableCps>false</enableCps>
     <cpsCancelUri>login?error=8</cpsCancelUri>
 </sqrlConfig>
