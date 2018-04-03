@@ -89,7 +89,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 			logger.info("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
 					pageData.getUrl().toString());
 			checkForErrorState(request, response);
-		} catch (final SqrlException e) {
+		} catch (final Throwable e) { // need to catch everything, NoClassDefError etc so we don't end up looping
 			logger.error("Error rendering login page", e);
 			displayErrorAndKillSession(request, "Rendering error");
 		}
