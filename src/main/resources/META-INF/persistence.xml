@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="1.0"
-	xmlns="http://java.sun.com/xml/ns/persistence">
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
 	<!-- Our example app persistence unit -->
 	<!-- The main web app DOES NOT have to use JPA, we do so here for convenience -->
-	<persistence-unit name="exampleapp-persistence"
-		transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="exampleapp-persistence" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<class>com.github.sqrlserverjava.example.data.AppUser</class>
 		<properties>
@@ -24,7 +24,7 @@
 		<class>com.github.sqrlserverjava.persistence.SqrlCorrelator</class>
 		<class>com.github.sqrlserverjava.persistence.SqrlUsedNutToken</class>
 		<properties>
-			<property name="eclipselink.logging.level" value="CONFIG" />
+			<property name="eclipselink.logging.level" value="FINE" />
             <property name="eclipselink.target-database" value="MYSQL" />
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1/sqrl?serverTimezone=America/New_York&amp;character_set_server=utf8mb4" />
