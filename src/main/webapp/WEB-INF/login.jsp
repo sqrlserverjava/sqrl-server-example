@@ -65,7 +65,7 @@
     	$("#sqrlImg").hide();
         instruction.innerText = "Waiting for SQRL client";
 		$("#cancel").show();
-    	if(subtitle.innerText.indexOf("error") >=0 ) {
+    	if(subtitle.innerText.indexOf("rror") >=0 ) {
     		subtitle.innerText = "";
     	}
     	if(<%=(String) request.getAttribute("cpsEnabled")%>) {
