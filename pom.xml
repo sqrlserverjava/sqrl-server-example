@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -38,7 +39,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.38</version>
+			<version>6.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -86,7 +87,7 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<!-- Provides a simple build number that can be displayed in the app-->
+				<!-- Provides a simple build number that can be displayed in the app -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
 				<version>1.4</version>
@@ -108,7 +109,7 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<!-- Include very detailed build info for logging-->
+				<!-- Include very detailed build info for logging -->
 				<groupId>net.mgorski.quicktag</groupId>
 				<artifactId>quicktag</artifactId>
 				<version>2.1.5</version>
@@ -122,6 +123,17 @@
 				</executions>
 				<configuration>
 					<outputPackage>com.github.sqrlserverjava.example</outputPackage>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- Allow us to deploy to tomcat for testing -->
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+          			<url>${tomcat.manager.url}</url>
+          			<server>laptop</server>
+          			<update>true</update>
 				</configuration>
 			</plugin>
 		</plugins>
