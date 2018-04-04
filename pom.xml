@@ -13,6 +13,10 @@
 	<name>SQRL Server Example Webapp</name>
 	<description>Example app that shows how to add SQRL authentication to an existing app.</description>
 	<url>http://maven.apache.org</url>
+	<properties>
+		<!-- Default, can be overridden by passing -Dtomcat.manager.url=...  -->
+	    <tomcat.manager.url>http://localhost:8010/manager/text</tomcat.manager.url>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.github.sqrlserverjava</groupId>
