@@ -21,6 +21,7 @@
 	<session-config>
 		<session-timeout>15</session-timeout>
 		<cookie-config>
+			<name>SQRL_EXAMPLE_APP_SESSION_ID</name>
 			<http-only>true</http-only>
 			<secure>true</secure>
 		</cookie-config>
