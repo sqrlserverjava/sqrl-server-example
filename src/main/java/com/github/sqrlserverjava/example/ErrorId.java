@@ -53,7 +53,7 @@ public enum ErrorId {
 	private ErrorId(int errorId, final String errorMessage, boolean showCorrelatorIfAvailable, boolean displayInRed) {
 		String toSet = errorMessage;
 		if (Util.isNotBlank(errorMessage)) {
-			toSet = ": " + errorMessage;
+			toSet = errorMessage;
 		}
 		this.errorId = errorId;
 		this.errorMessage = toSet;
@@ -68,7 +68,7 @@ public enum ErrorId {
 	public String buildErrorMessage(String correlatorString) {
 		final StringBuilder buf = new StringBuilder(100);
 		if (displayInRed) {
-			buf.append("Error");
+			buf.append("Error: ");
 		}
 		buf.append(errorMessage).append(".");
 		if (showCorrelatorIfAvailable && Util.isNotBlank(correlatorString)) {
