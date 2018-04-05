@@ -15,7 +15,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<!-- Default, can be overridden by passing -Dtomcat.manager.url=...  -->
-	    <tomcat.manager.url>http://localhost:8010/manager/text</tomcat.manager.url>
+	    <tomcat.manager.url>http://127.0.0.1:8010/manager/text</tomcat.manager.url>
 	</properties>
 	<dependencies>
 		<dependency>
