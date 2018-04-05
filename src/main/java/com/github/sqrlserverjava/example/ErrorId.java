@@ -32,7 +32,7 @@ public enum ErrorId {
 	/**
 	 * When CPS is enabled, this will be passed via the "can" param 
 	 */
-	SQRL_AUTH_CANCELLED(8, "SQRL authentication cancelled", false, false),
+	SQRL_AUTH_CANCELLED(8, "SQRL authentication cancelled by user", false, false),
 	SYSTEM_ERROR(9, "System error"),
 	INVALID_USERNAME_OR_PASSWORD(10, "Invalid username or password", false, true),
 	;
