@@ -91,7 +91,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 			checkForErrorState(request, response);
 		} catch (final Throwable e) { // need to catch everything, NoClassDefError etc so we don't end up looping
 			logger.error("Error rendering login page", e);
-			displayErrorAndKillSession(request, "Rendering error");
+			displayErrorAndKillSession(request, "Rendering error", true);
 		}
 		request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
 	}
@@ -102,20 +102,22 @@ public class RenderLoginPageServlet extends HttpServlet {
 		if (Util.isBlank(errorParam)) {
 			return;
 		}
-		String errorMessage = ErrorId.lookup(errorParam);
-
-		final StringBuilder buf = new StringBuilder("Error").append(errorMessage).append(".");
+		ErrorId errorId = ErrorId.lookup(errorParam);
 		// If we have access to the correlator, append the first 5 chars to the message in case it gets reported
 		final String correlatorString = sqrlServerOperations.extractSqrlCorrelatorStringFromRequestCookie(request);
-		if (Util.isNotBlank(correlatorString)) {
-			buf.append("    code=" + correlatorString.substring(0, 5));
-		}
-		displayErrorAndKillSession(request, buf.toString());
+		String errorMessage = errorId.buildErrorMessage(correlatorString);
+
+		displayErrorAndKillSession(request, errorMessage, errorId.isDisplayInRed());
 	}
 
-	private void displayErrorAndKillSession(final HttpServletRequest request, final String errorText) {
+	private void displayErrorAndKillSession(final HttpServletRequest request, final String errorText,
+			boolean displayInRed) {
 		// Set it so it gets displayed
-		request.setAttribute(Constants.JSP_SUBTITLE, Util.wrapErrorInRed(errorText));
+		String content = errorText;
+		if (displayInRed) {
+			content = Util.wrapErrorInRed(errorText);
+		}
+		request.setAttribute(Constants.JSP_SUBTITLE, content);
 		// Since we are in an error state, kill the session
 		final HttpSession session = request.getSession(false);
 		if (session != null) {

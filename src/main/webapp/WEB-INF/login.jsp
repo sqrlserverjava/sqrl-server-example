@@ -158,7 +158,7 @@
 				<a href="<%=(String) request.getAttribute("sqrlurl")%>"  onclick="sqrlInProgress();return false;" >
 					<img id="sqrlButton" src="signInSqrl.png" alt="Click to sign in with SQRL" /></a>
 				<br/>
-				<a id="cancel"  href="logout">Cancel SQRL authentication</a>
+				<a id="cancel"  href="login?error=8">Cancel SQRL authentication</a>
 				<br/>
 			</div>
 		  </div>
