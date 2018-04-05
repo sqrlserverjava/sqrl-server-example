@@ -87,7 +87,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 			request.setAttribute("sqrlqrdesc", "Mobile SQRL - scan QR code with SQRL app");
 			request.setAttribute("correlator", pageData.getCorrelator());
 			logger.info("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
-					pageData.getUrl().toString());
+					sqrlurlWithCan);
 			checkForErrorState(request, response);
 		} catch (final Throwable e) { // need to catch everything, NoClassDefError etc so we don't end up looping
 			logger.error("Error rendering login page", e);
