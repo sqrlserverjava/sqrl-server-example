@@ -65,7 +65,9 @@
     	$("#sqrlImg").hide();
         instruction.innerText = "Waiting for SQRL client";
 		$("#cancel").show();
-   		subtitle.innerText = "";
+    	if(subtitle.innerText.indexOf("rror") >=0 ) {
+    		subtitle.innerText = "";
+    	}
     	if(<%=(String) request.getAttribute("cpsEnabled")%>) {
     		cpsGifProbe.onerror();	<%-- try to connect to the SQRL client on localhost if possible (CPS) --%>
     	}
