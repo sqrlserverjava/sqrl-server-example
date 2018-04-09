@@ -24,7 +24,7 @@
 		<class>com.github.sqrlserverjava.persistence.SqrlCorrelator</class>
 		<class>com.github.sqrlserverjava.persistence.SqrlUsedNutToken</class>
 		<properties>
-			<property name="eclipselink.logging.level" value="FINE" />
+			<property name="eclipselink.logging.level" value="CONFIG" />
             <property name="eclipselink.target-database" value="MYSQL" />
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1/sqrl?serverTimezone=America/New_York&amp;character_set_server=utf8mb4" />
