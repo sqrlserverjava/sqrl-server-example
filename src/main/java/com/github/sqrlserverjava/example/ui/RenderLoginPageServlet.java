@@ -83,7 +83,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 			request.setAttribute("cpsEnabled", Boolean.toString(sqrlConfig.isEnableCps()));
 			// The url that will get sent to the SQRL client via CPS must include a cancel page (can) if case of failure
 			final String sqrlurlWithCan = sqrlUrl;
-			request.setAttribute("sqrlurlwithcan64", SqrlUtil.sqrlBase64UrlEncode(sqrlurlWithCan));
+			request.setAttribute("sqrlurlwithcan64", SqrlUtil.base64UrlEncode(sqrlurlWithCan));
 			request.setAttribute("sqrlqrdesc", "Mobile SQRL - scan QR code with SQRL app");
 			request.setAttribute("correlator", pageData.getCorrelator());
 			logger.info("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
