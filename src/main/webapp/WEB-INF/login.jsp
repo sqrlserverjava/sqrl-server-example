@@ -71,7 +71,10 @@
     	if(<%=(String) request.getAttribute("cpsEnabled")%>) {
     		cpsGifProbe.onerror();	<%-- try to connect to the SQRL client on localhost if possible (CPS) --%>
     	}
-   		window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
+		setTimeout(function() {
+			<%-- Firefox 59.0.2 needs a delay before redirect or the spinner won't show --%>
+			window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
+		}, (200)); 
 	}
 	
 	function stopPolling(socket, subsocket, request) {
