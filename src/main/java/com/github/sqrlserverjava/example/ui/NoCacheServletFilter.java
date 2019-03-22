@@ -31,11 +31,13 @@ public class NoCacheServletFilter implements Filter {
 		logger.info(VersionExtractor.extractDetailedBuildInfo(Module.EXAMPLE_APP));
 		// Load our simple build number for display on the web app
 		try (InputStream is = filterConfig.getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")) {
-			Properties properties = new Properties();
-			properties.load(is);
-			String tempBuild = properties.getProperty("Implementation-Build");
-			if (tempBuild != null) {
-				buildNumber = tempBuild;
+			if (is != null) {
+				final Properties properties = new Properties();
+				properties.load(is);
+				final String tempBuild = properties.getProperty("Implementation-Build");
+				if (tempBuild != null) {
+					buildNumber = tempBuild;
+				}
 			}
 		} catch (RuntimeException | IOException e) {
 			logger.error("Caught Exception during build number check", e);
