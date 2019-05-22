@@ -81,10 +81,11 @@ public class RenderLoginPageServlet extends HttpServlet {
 			final String sqrlUrl = pageData.getUrl().toString();
 			request.setAttribute("sqrlurl", sqrlUrl);
 			request.setAttribute("cpsEnabled", Boolean.toString(sqrlConfig.isEnableCps()));
+			request.setAttribute("cpsNotEnabled", Boolean.toString(!sqrlConfig.isEnableCps()));
 			// The url that will get sent to the SQRL client via CPS must include a cancel page (can) if case of failure
 			final String sqrlurlWithCan = sqrlUrl;
 			request.setAttribute("sqrlurlwithcan64", SqrlUtil.sqrlBase64UrlEncode(sqrlurlWithCan));
-			request.setAttribute("sqrlqrdesc", "Mobile SQRL - scan QR code with SQRL app");
+			request.setAttribute("sqrlqrdesc", "Scan with mobile SQRL app");
 			request.setAttribute("correlator", pageData.getCorrelator());
 			logger.info("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
 					sqrlurlWithCan);
@@ -102,16 +103,16 @@ public class RenderLoginPageServlet extends HttpServlet {
 		if (Util.isBlank(errorParam)) {
 			return;
 		}
-		ErrorId errorId = ErrorId.lookup(errorParam);
+		final ErrorId errorId = ErrorId.lookup(errorParam);
 		// If we have access to the correlator, append the first 5 chars to the message in case it gets reported
 		final String correlatorString = sqrlServerOperations.extractSqrlCorrelatorStringFromRequestCookie(request);
-		String errorMessage = errorId.buildErrorMessage(correlatorString);
+		final String errorMessage = errorId.buildErrorMessage(correlatorString);
 
 		displayErrorAndKillSession(request, errorMessage, errorId.isDisplayInRed());
 	}
 
 	private void displayErrorAndKillSession(final HttpServletRequest request, final String errorText,
-			boolean displayInRed) {
+			final boolean displayInRed) {
 		// Set it so it gets displayed
 		String content = errorText;
 		if (displayInRed) {
