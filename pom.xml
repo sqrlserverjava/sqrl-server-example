@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>sqrlexample</artifactId>
 	<packaging>war</packaging>
-	<version>0.7.1-SNAPSHOT</version>
+	<version>0.7.2-SNAPSHOT</version>
 	<name>SQRL Server Example Webapp</name>
 	<description>Example app that shows how to add SQRL authentication to an existing app.</description>
 	<url>http://maven.apache.org</url>
