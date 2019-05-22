@@ -10,11 +10,10 @@
 <!--[if lt IE 9]><script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><![endif]-->
 <!--[if IE 9]><!--><script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><!--<![endif]-->
 
+<!-- Include javascript here for readability. Real apps would move it to the server -->
 <script	type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.12/atmosphere.js"></script>
-	<!-- Include javascript here for readability. Real apps would move it to the server -->
 	<script>
-	<%--  http://stackoverflow.com/a/11663507/2863942 --%>
-	<%--  Avoid `console` errors in browsers that lack a console. --%>
+	// Avoid `console` errors in browsers that lack a console.   http://stackoverflow.com/a/11663507/2863942 
 	(function() {
 	    var method;
 	    var noop = function () {};
@@ -30,22 +29,22 @@
 	    while (length--) {
 	        method = methods[length];
 	
-	        <%-- Only stub undefined methods. --%>
+	        // Only stub undefined methods.
 	        if (!console[method]) {
 	            console[method] = noop;
 	        }
 	    }
 	}());
 	
-	var localhostRoot = 'http://localhost:25519/';	<%-- the SQRL client listener  --%>
-	var cpsGifProbe = new Image(); 					<%-- create an instance of a memory-based probe image --%>
+	var localhostRoot = 'http://localhost:25519/';	// the SQRL client CPS listener
+	var cpsGifProbe = new Image(); 					// create an instance of a memory-based probe image
 	
-	<%-- Taken from https://www.grc.com/sqrl/demo/pagesync.js and renamed --%>
-	cpsGifProbe.onload = function() {  <%-- if the SQRL localhost listener is present --%>
+	// Taken from https://www.grc.com/sqrl/demo/pagesync.js and renamed
+	cpsGifProbe.onload = function() {  // if the SQRL localhost CPS listener is present
 		document.location.href = localhostRoot + "<%=(String) request.getAttribute("sqrlurlwithcan64")%>";
 	};
 
-	<%-- Taken from https://www.grc.com/sqrl/demo/pagesync.js and renamed --%>
+	// Taken from https://www.grc.com/sqrl/demo/pagesync.js and renamed
 	cpsGifProbe.onerror = function() {
 		setTimeout( function(){ cpsGifProbe.src = localhostRoot + Date.now() + '.gif';	}, 200 );
 	}
@@ -69,11 +68,11 @@
     		subtitle.innerText = "";
     	}
     	if(<%=(String) request.getAttribute("cpsEnabled")%>) {
-    		cpsGifProbe.onerror();	<%-- try to connect to the SQRL client on localhost if possible (CPS) --%>
+    		cpsGifProbe.onerror();	// try to connect to the SQRL client on localhost if possible (CPS)
     	}
 		setTimeout(function() {
-			<%-- Firefox 59.0.2 needs a delay before redirect or the spinner won't show --%>
-			window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>");
+			// Firefox 59.0.2 needs a delay before redirect or the spinner won't show
+			window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>"); // TODO: this breaks the webextension
 		}, (200)); 
 	}
 	
@@ -84,7 +83,7 @@
 	
     $(document).ready(function() {
     $("#cancel").hide();
-	<%-- Atmosphere stuff for auto refresh --%>
+	// Atmosphere logic for auto refresh
 	var socket = atmosphere;
 	var subsocket;
 	var atmosphereurl = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/")) +"/sqrlauthpolling";
@@ -114,14 +113,14 @@
 				subsocket.close();
 				window.location.replace("login?error="+status);
 			} else if (status.indexOf("AUTHENTICATED_CPS") > -1) {
-				<%-- Stop polling and wait for the SQRL client to provide the URL	--%>	
+				// Stop polling and wait for the SQRL client to provide the URL	
 				subsocket.close();
 			} else if(status == "AUTHENTICATED_BROWSER") {
 				subsocket.push(atmosphere.util.stringifyJSON({ state: "AUTHENTICATED_BROWSER" }));
 				subsocket.close();
 				window.location.replace("sqrllogin");
 			} else if(status == "COMMUNICATING"){
-				<%-- The user scanned the QR code and sqrl auth is in progress --%>
+				// The user scanned the QR code and sqrl auth is in progress
 				instruction.innerText = "Communicating with SQRL client";
 				subsocket.push(atmosphere.util.stringifyJSON({ state: "COMMUNICATING" }));
 				sqrlInProgress();
@@ -157,7 +156,6 @@
 		  <div class="row">
 			<h4 id="instruction"> </h4>
 			<div class="col-sm-3" >
-				<!--  <img id="sqrlButton" onclick="sqrlInProgress()" src="signInSqrl.png" /> -->  
 				<a href="<%=(String) request.getAttribute("sqrlurl")%>"  onclick="sqrlInProgress();return false;" >
 					<img id="sqrlButton" src="signInSqrl.png" alt="Click to sign in with SQRL" /></a>
 				<br/>
@@ -175,7 +173,6 @@
 				<p>
 					Username: (alphanumeric)<br>
 				</p><form action="auth" method="post">  <!-- TODO; what is this background-image -->
-					<!--  <input name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" autocomplete="off" type="text">-->
 					<input name="username" pattern="[a-zA-Z0-9]+" maxlength="10" required autocomplete="off" type="text">
 					<br> Password:<br> 
 					<input name="password" pattern="[a-zA-Z]+" value="sqrl" maxlength="10" required  autocomplete="off" type="password">
@@ -202,7 +199,7 @@
 			<%=(String) request.getAttribute("sqrlqrdesc")%><br>
 			</div>
 			<div class="col-sm-7" >
-			 <%-- Give some space so users can scroll past the QR code so it's easy to scan --%>
+			<!-- Give some space so users can scroll past the QR code so it's easy to scan --> 
 			<br/>
 			<br/>
 			<br/>
