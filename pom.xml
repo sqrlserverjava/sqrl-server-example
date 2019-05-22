@@ -26,15 +26,15 @@
 		<dependency>
 			<groupId>com.github.sqrlserverjava</groupId>
 			<artifactId>sqrl-server-atmosphere</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>1.0.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<!-- Reference JPA provider -->
+			<!-- Reference JPA provider, substitute with another JPA provider as desired-->
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
 			<version>2.6.3</version>
 		</dependency>
-		<!-- Depending on where we deploy, we use derby or mysql db -->
+		<!-- Depending on where we deploy, we use derby or mysql db.  A real app would just include one -->
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
@@ -62,6 +62,9 @@
 	<build>
 		<finalName>sqrlexample</finalName>
 		<plugins>
+			<!-- The following plugins are specific to running the example app in jetty, or to the
+			way in which the example app is deployed to sqrljava.com.  These are NOT needed
+			in the pom of your webapp -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -85,6 +88,7 @@
 
 				<configuration>
 					<scanIntervalSeconds>3</scanIntervalSeconds>
+					<jettyXml>jetty/jetty.xml,jetty/jetty-ssl.xml,jetty/jetty-ssl-context.xml,jetty/jetty-https.xml</jettyXml>
 					<webApp>
 						<contextPath>/sqrlexample</contextPath>
 					</webApp>
@@ -136,7 +140,7 @@
 				<version>2.2</version>
 				<configuration>
           			<url>${tomcat.manager.url}</url>
-          			<server>laptop</server>
+          			<server>tomcat8laptop</server>
           			<update>true</update>
 				</configuration>
 			</plugin>
