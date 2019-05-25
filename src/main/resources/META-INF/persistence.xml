@@ -1,45 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-	version="2.0">
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence">
 	<!-- Our example app persistence unit -->
 	<!-- The main web app DOES NOT have to use JPA, we do so here for convenience -->
-	<persistence-unit name="exampleapp-persistence" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="exampleapp-persistence"
+		transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<class>com.github.sqrlserverjava.example.data.AppUser</class>
-        <properties>
-            <!-- Use an in memory database to allow for testing without DB setup -->
-            <property name="eclipselink.logging.level" value="WARNING" />
-        	<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:sqrlexample;create=true" />
-			<property name="javax.persistence.jdbc.user" value="" />
-			<property name="javax.persistence.jdbc.password" value="" />
-        </properties>	</persistence-unit>
-	<!-- The SQRL server persistence unit -->
+		<properties>
+			<property name="eclipselink.logging.level" value="CONFIG" />
+            <property name="eclipselink.target-database" value="MYSQL" />
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://jj/sqrllaptop?serverTimezone=America/New_York&amp;character_set_server=utf8mb4" />
+            <property name="javax.persistence.jdbc.user" value="sqrl" />
+            <property name="javax.persistence.jdbc.password" value="WEdtYtf8KNGmc77T" />
+		</properties>
+	</persistence-unit>
+	<!-- The java SQRL persistence unit -->
 	<persistence-unit name="javasqrl-persistence"
 		transaction-type="RESOURCE_LOCAL">
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>com.github.sqrlserverjava.persistence.SqrlIdentity</class>
-        <class>com.github.sqrlserverjava.persistence.SqrlCorrelator</class>
-        <class>com.github.sqrlserverjava.persistence.SqrlUsedNutToken</class>
-        <properties>
-        	<!-- Use an in memory database to allow for testing without DB setup -->
-            <property name="eclipselink.logging.level" value="WARNING" />
-        	<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:sqrlbackend;create=true" />
-			<property name="javax.persistence.jdbc.user" value="" />
-			<property name="javax.persistence.jdbc.password" value="" />
-        </properties>
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>com.github.sqrlserverjava.persistence.SqrlIdentity</class>
+		<class>com.github.sqrlserverjava.persistence.SqrlCorrelator</class>
+		<class>com.github.sqrlserverjava.persistence.SqrlUsedNutToken</class>
+		<properties>
+			<property name="eclipselink.logging.level" value="CONFIG" />
+            <property name="eclipselink.target-database" value="MYSQL" />
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://jj/sqrllaptop?serverTimezone=America/New_York&amp;character_set_server=utf8mb4" />
+            <property name="javax.persistence.jdbc.user" value="sqrl" />
+            <property name="javax.persistence.jdbc.password" value="WEdtYtf8KNGmc77T" />
+		</properties>
 	</persistence-unit>
 </persistence>
-<!-- 
-Example of mysql persistence settings:
-         <property name="eclipselink.logging.level" value="CONFIG" />
-         <property name="eclipselink.target-database" value="MYSQL" />
-         <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-         <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1/sqrl?serverTimezone=America/New_York&amp;character_set_server=utf8mb4" />
-         <property name="javax.persistence.jdbc.user" value="sqrl" />
-         <property name="javax.persistence.jdbc.password" value="changeit" />
- -->

@@ -11,7 +11,7 @@
 <!--[if IE 9]><!--><script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script><!--<![endif]-->
 
 <!-- Real apps will use minifed version: atmosphere.min.js -->
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.9/atmosphere.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/atmosphere/2.2.12/atmosphere.js"></script>
 
 <!-- Include javascript here for readability. Real apps would move it to the server -->
 	<script>
@@ -94,6 +94,7 @@
             logLevel: "debug",
             transport: "sse",
             reconnectInterval: 5000,
+            headers:{'X-sqrl-corelator':'<%=(String) request.getAttribute("correlator")%>'},
             fallbackTransport: "long-polling"};
 
         request.onOpen = function (response) {
@@ -125,13 +126,13 @@
 				// Stop polling and wait for the SQRL client to provide the URL	
 				subsocket.close();
 			} else if(statusText == "AUTHENTICATED_BROWSER") {
-				subsocket.push(atmosphere.util.stringifyJSON({ state: "AUTHENTICATED_BROWSER" }));
+				subsocket.push(atmosphere.util.stringifyJSON({ state: "AUTHENTICATED_BROWSER" , correlator: "<%=(String) request.getAttribute("correlator")%>"}));
 				subsocket.close();
 				window.location.replace("sqrllogin");
 			} else if(statusText == "COMMUNICATING"){
 				// The user scanned the QR code and sqrl auth is in progress
 				instruction.innerText = "Communicating with SQRL client";
-				subsocket.push(atmosphere.util.stringifyJSON({ state: "COMMUNICATING" }));
+				subsocket.push(atmosphere.util.stringifyJSON({ state: "COMMUNICATING" , correlator: "<%=(String) request.getAttribute("correlator")%>"}));
 				sqrlInProgress();
 			} else {
 				console.error("received unknown state from server: " + statusText);
@@ -150,7 +151,7 @@
         };
       
         subsocket = socket.subscribe(request);
-        subsocket.push(atmosphere.util.stringifyJSON({ state: "CORRELATOR_ISSUED" }));
+        subsocket.push(atmosphere.util.stringifyJSON({ state: "CORRELATOR_ISSUED", correlator: "<%=(String) request.getAttribute("correlator")%>" }));
 	});
 	</script>
 </head>

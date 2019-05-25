@@ -62,13 +62,16 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 			// Web polling SQRL auth (non-CPS)
 			final boolean requestContainsCorrelatorCookie = sqrlServerOperations
 					.extractSqrlCorrelatorStringFromRequestCookie(request) != null;
-			if (requestContainsCorrelatorCookie && isSqrlWebRefreshAuthComplete(request, response)) {
-				// Nothing else to do, just fall through and return
-				// TODO: why fall through if we are using long polling now? Just throw error do same below for
-				// return false
-			} else {
-				RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
+			final boolean authComplete = isSqrlWebRefreshAuthComplete(request, response);
+			if (requestContainsCorrelatorCookie && authComplete) {
+				// All good, nothing else to do
+				return;
+			} else if (!requestContainsCorrelatorCookie) {
+				logger.error("Error processing login after SQRL auth: correlator cookie not found");
+			} else if (!authComplete) {
+				logger.error("Error processing login: SQRL auth incomplete");
 			}
+			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.ERROR_SQRL_INTERNAL);
 		} catch (final RuntimeException | SQLException | SqrlException e) {
 			logger.error("Error processing username/password login ", e);
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);

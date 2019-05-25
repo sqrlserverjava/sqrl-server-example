@@ -46,7 +46,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 			checkInit();
 			displayLoginPage(request, response);
 		} catch (final RuntimeException e) {
-			logger.error("Error rendering login page", e);
+			logger.error("channel=front process=renderLogin detail=\"Error rendering login page\"", e);
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
 		}
 	}
@@ -87,11 +87,11 @@ public class RenderLoginPageServlet extends HttpServlet {
 			request.setAttribute("sqrlurlwithcan64", SqrlUtil.sqrlBase64UrlEncode(sqrlurlWithCan));
 			request.setAttribute("sqrlqrdesc", "Scan with mobile SQRL app");
 			request.setAttribute("correlator", pageData.getCorrelator());
-			logger.info("Showing login page with correlator={}, sqrlurl={}", pageData.getCorrelator(),
-					sqrlurlWithCan);
+			logger.info("channel=front cor={} process=renderLogin detail=\"Rendered login page\" sqrlurl={}",
+					pageData.getCorrelator(), sqrlurlWithCan);
 			checkForErrorState(request, response);
 		} catch (final Throwable e) { // need to catch everything, NoClassDefError etc so we don't end up looping
-			logger.error("Error rendering login page", e);
+			logger.error("channel=front process=renderLogin detail=\"Error rendering login page\"", e);
 			displayErrorAndKillSession(request, "Rendering error", true);
 		}
 		request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
