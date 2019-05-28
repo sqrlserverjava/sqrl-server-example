@@ -71,7 +71,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 		// Default action, show the login page with a new SQRL QR code
 		try {
 			final SqrlAuthPageData pageData = sqrlServerOperations.browserFacingOperations()
-					.prepareSqrlAuthPageData(request, response, 100);
+					.prepareSqrlAuthPageData(request, response, 150);
 			final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
 			baos.flush();
 			final byte[] imageInByteArray = baos.toByteArray();
