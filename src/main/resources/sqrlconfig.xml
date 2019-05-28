@@ -3,6 +3,6 @@
     <backchannelServletPath>sqrlbc</backchannelServletPath>
     <!-- TODO: change this key for a real deployment -->
     <aesKeyBase64>DhMncY4ErDcLRfwfyeN02Q==</aesKeyBase64>
-    <enableCps>false</enableCps>
+    <enableCps>true</enableCps>
     <cpsCancelUri>login?error=8</cpsCancelUri>
 </sqrlConfig>

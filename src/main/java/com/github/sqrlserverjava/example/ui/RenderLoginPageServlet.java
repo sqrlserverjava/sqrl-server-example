@@ -1,4 +1,6 @@
 package com.github.sqrlserverjava.example.ui;
+import static com.github.sqrlserverjava.backchannel.SqrlClientRequestLoggingUtil.formatForLogging;
+import static com.github.sqrlserverjava.backchannel.SqrlClientRequestLoggingUtil.initLogging;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.github.sqrlserverjava.SqrlAuthPageData;
 import com.github.sqrlserverjava.SqrlConfig;
 import com.github.sqrlserverjava.SqrlServerOperations;
+import com.github.sqrlserverjava.backchannel.SqrlClientRequestLoggingUtil;
+import com.github.sqrlserverjava.backchannel.SqrlClientRequestLoggingUtil.Channel;
 import com.github.sqrlserverjava.example.Constants;
 import com.github.sqrlserverjava.example.ErrorId;
 import com.github.sqrlserverjava.example.Util;
@@ -41,13 +45,15 @@ public class RenderLoginPageServlet extends HttpServlet {
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
-		logger.info(SqrlUtil.logEnterServlet(request));
+		initLogging(Channel.FRONT, "prepLogin", request);
 		try {
+			logger.info(formatForLogging(SqrlUtil.logEnterServlet(request)));
 			checkInit();
 			displayLoginPage(request, response);
 		} catch (final RuntimeException e) {
-			logger.error("channel=front process=renderLogin detail=\"Error rendering login page\"", e);
+			logger.error(formatForLogging("Error rendering login page"), e);
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
+			SqrlClientRequestLoggingUtil.cleanup();
 		}
 	}
 
@@ -87,11 +93,10 @@ public class RenderLoginPageServlet extends HttpServlet {
 			request.setAttribute("sqrlurlwithcan64", SqrlUtil.sqrlBase64UrlEncode(sqrlurlWithCan));
 			request.setAttribute("sqrlqrdesc", "Scan with mobile SQRL app");
 			request.setAttribute("correlator", pageData.getCorrelator());
-			logger.info("channel=front cor={} process=renderLogin detail=\"Rendered login page\" sqrlurl={}",
-					pageData.getCorrelator(), sqrlurlWithCan);
+			logger.info(formatForLogging("Rendered login page sqrlurl={}"), sqrlurlWithCan);
 			checkForErrorState(request, response);
 		} catch (final Throwable e) { // need to catch everything, NoClassDefError etc so we don't end up looping
-			logger.error("channel=front process=renderLogin detail=\"Error rendering login page\"", e);
+			logger.error(formatForLogging("Error rendering login page"), e);
 			displayErrorAndKillSession(request, "Rendering error", true);
 		}
 		request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);

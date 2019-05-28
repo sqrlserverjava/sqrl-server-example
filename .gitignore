@@ -17,5 +17,4 @@ settings.gradle
 buildAndDeploy.bat
 src/main/java/com/github/sqrlserverjava/example/Version.java
 sqrlexample.war*
-deploy.bat
-buildForJetty.bat
+*.bat
