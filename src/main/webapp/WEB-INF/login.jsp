@@ -59,6 +59,8 @@
     	}
     	$("#sqrlButton").attr("src", "spinner.gif");
     	$("#cancel").hide();
+    	$("#footer").hide();
+    	$("#subtitle").hide();
     	$("#uplogin").hide();
     	$("#sqrlQrRow").hide();
     	$("#or1").hide();
@@ -72,10 +74,6 @@
     	if(<%=(String) request.getAttribute("cpsEnabled")%>) {
     		cpsGifProbe.onerror();	// try to connect to the SQRL client on localhost if possible (CPS)
     	}
-		setTimeout(function() {
-			// Firefox 59.0.2 needs a delay before redirect or the spinner won't show
-			window.location.replace("<%=(String) request.getAttribute("sqrlurl")%>"); // TODO: this breaks the webextension
-		}, (200)); 
 	}
 	
 	function stopPolling(socket, subsocket, request) {
@@ -166,7 +164,7 @@
 		  <div class="row">
 			<h4 id="instruction"> </h4>
 			<div class="col-sm-3" >
-				<a href="<%=(String) request.getAttribute("sqrlurl")%>"  onclick="sqrlInProgress();return false;" >
+				<a href="<%=(String) request.getAttribute("sqrlurl")%>"  onclick="sqrlInProgress();return true;" >
 					<img id="sqrlButton" src="signInSqrl.png" alt="Click to sign in with SQRL" /></a>
 				<br/>
 				<a id="cancel"  href="login?error=8">Cancel SQRL authentication</a>
@@ -223,5 +221,62 @@
 		 </div>
 		</div>
 	</div>
+	<!-- Footer -->
+	<footer  id="footer" class="page-footer font-small blue pt-4">
+	
+	  <!-- Footer Links -->
+	  <div class="container-fluid text-md-left text-md-left">
+	
+	    <!-- Grid row -->
+	    <div class="row">
+	
+	      <hr class="clearfix w-100 d-md-none pb-3">
+	
+	      <!-- Grid column -->
+	      <div class="col-md-1 mb-md-0 mb-1">
+		  </div>
+		  
+	      <!-- Grid column -->
+	      <div class="col-md-3 mb-md-0 mb-3">
+	
+	        <!-- Links -->
+	        <h5 class="text-uppercase">Component</h5>
+	
+	        <ul class="list-unstyled">
+	          <li>
+	            <a href="https://github.com/sqrlserverjava/sqrl-server-example">Demo App Version</a>
+	          </li>
+	          <li>
+	            <a href="https://github.com/sqrlserverjava/sqrl-server-base">Base Version</a>
+	          </li>
+	          <li>
+	            <a href="https://github.com/sqrlserverjava/sqrl-server-atmosphere">Atmosphere Version</a>
+	          </li>
+	        </ul>
+	
+	      </div>
+	      <!-- Grid column -->
+	
+	      <!-- Grid column -->
+	      <div class="col-md-6 mb-md-0 mb-6">
+	
+	        <!-- Links -->
+	        <h5 class="text-uppercase">Version</h5>
+	
+	        <ul class="list-unstyled">
+	          <li><%=com.github.sqrlserverjava.example.Version.BANNER%></li>
+	          <li><%=com.github.sqrlserverjava.util.Version.BANNER%></li>
+	          <li><%=com.github.sqrlserverjava.atmosphere.Version.BANNER%></li>
+	        </ul>
+	
+	      </div>
+	      <!-- Grid column -->
+	
+	    </div>
+	    <!-- Grid row -->
+	
+	  </div>
+	  <!-- Footer Links -->
+	</footer>
 </body>
 </html>
