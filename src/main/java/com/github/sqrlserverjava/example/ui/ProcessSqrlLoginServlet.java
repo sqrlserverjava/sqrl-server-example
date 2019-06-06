@@ -118,8 +118,10 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 		}
 		final boolean existingAppUser = nativeAppUser != null;
 		if (existingAppUser) {
+			// The example app relies on server side session attribute to signal that the user has
+			// been authenticated and to indentify the user
 			session.setAttribute(Constants.SESSION_NATIVE_APP_USER, nativeAppUser);
-			sendUserToAppPage(response);
+			request.getRequestDispatcher("/app").forward(request, response);
 			return true;
 		} else {
 			// sqrlIdentity exists but NativeAppUser doesn't. Send them to enrollment page to see if they have a
@@ -129,11 +131,4 @@ public class ProcessSqrlLoginServlet extends HttpServlet {
 			return true;
 		}
 	}
-
-
-	private void sendUserToAppPage(final HttpServletResponse response) {
-		response.setHeader("Location", "app");
-		response.setStatus(302);
-	}
-
 }
