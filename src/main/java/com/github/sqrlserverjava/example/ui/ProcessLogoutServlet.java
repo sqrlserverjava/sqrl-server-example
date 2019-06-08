@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.sqrlserverjava.SqrlBrowserFacingOperations;
+import com.github.sqrlserverjava.BrowserFacingOperations;
 import com.github.sqrlserverjava.SqrlServerOperations;
 import com.github.sqrlserverjava.example.ErrorId;
 import com.github.sqrlserverjava.example.Util;
@@ -29,7 +29,7 @@ import com.github.sqrlserverjava.util.SqrlUtil;
 public class ProcessLogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 2107859031515432927L;
 	private static final Logger logger = LoggerFactory.getLogger(ProcessLogoutServlet.class);
-	private final SqrlBrowserFacingOperations sqrlbrowserFacingOperations = new SqrlServerOperations(
+	private final BrowserFacingOperations sqrlbrowserFacingOperations = new SqrlServerOperations(
 			SqrlConfigHelper.loadFromClasspath()).browserFacingOperations();
 
 	@Override

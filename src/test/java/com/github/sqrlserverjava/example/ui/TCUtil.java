@@ -15,7 +15,6 @@ public class TCUtil {
 	@Deprecated
 	private static final SqrlConfig getTestCaseSettings() {
 		final SqrlConfig sqrlConfig = new SqrlConfig();
-		sqrlConfig.setServerFriendlyName("SQRL JUNIT test");
 		sqrlConfig.setBackchannelServletPath("sqrlbc");
 		sqrlConfig.setAesKeyBase64(AES_TEST_KEY);
 		sqrlConfig.setNutValidityInSeconds(Integer.MAX_VALUE);

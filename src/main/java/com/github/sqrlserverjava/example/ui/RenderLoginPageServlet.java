@@ -1,6 +1,6 @@
 package com.github.sqrlserverjava.example.ui;
-import static com.github.sqrlserverjava.backchannel.SqrlClientRequestLoggingUtil.formatForLogging;
-import static com.github.sqrlserverjava.backchannel.SqrlClientRequestLoggingUtil.initLogging;
+import static com.github.sqrlserverjava.backchannel.LoggingUtil.formatForLogging;
+import static com.github.sqrlserverjava.backchannel.LoggingUtil.initLogging;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,11 +16,11 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.sqrlserverjava.SqrlAuthPageData;
+import com.github.sqrlserverjava.AuthPageData;
 import com.github.sqrlserverjava.SqrlConfig;
 import com.github.sqrlserverjava.SqrlServerOperations;
-import com.github.sqrlserverjava.backchannel.SqrlClientRequestLoggingUtil;
-import com.github.sqrlserverjava.backchannel.SqrlClientRequestLoggingUtil.Channel;
+import com.github.sqrlserverjava.backchannel.LoggingUtil;
+import com.github.sqrlserverjava.backchannel.LoggingUtil.Channel;
 import com.github.sqrlserverjava.example.Constants;
 import com.github.sqrlserverjava.example.ErrorId;
 import com.github.sqrlserverjava.example.Util;
@@ -53,7 +53,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 		} catch (final RuntimeException e) {
 			logger.error(formatForLogging("Error rendering login page"), e);
 			RenderLoginPageServlet.redirectToLoginPageWithError(response, ErrorId.SYSTEM_ERROR);
-			SqrlClientRequestLoggingUtil.cleanup();
+			LoggingUtil.cleanup();
 		}
 	}
 
@@ -70,7 +70,7 @@ public class RenderLoginPageServlet extends HttpServlet {
 		request.setAttribute(Constants.JSP_SUBTITLE, "Login Page");
 		// Default action, show the login page with a new SQRL QR code
 		try {
-			final SqrlAuthPageData pageData = sqrlServerOperations.browserFacingOperations()
+			final AuthPageData pageData = sqrlServerOperations.browserFacingOperations()
 					.prepareSqrlAuthPageData(request, response, 150);
 			final ByteArrayOutputStream baos = pageData.getQrCodeOutputStream();
 			baos.flush();
